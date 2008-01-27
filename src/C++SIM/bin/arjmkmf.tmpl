@@ -1,0 +1,21 @@
+#!/bin/sh
+
+#
+# Copyright (C) 1994
+#
+# Department of Computing Science,
+# The University,
+# Newcastle upon Tyne,
+# UK.
+#
+
+IMAKE=imake
+ARJUNA_IMAKE_INCLUDE=-ICONFIGDIRECTORY
+ARJUNA_IMAKE_TEMPLATE=Config/Arjuna.tmpl
+ARJUNA_IMAKE_FLAGS="IMAKEFLAGS"
+MV=mv
+SED=sed
+RM="rm -f"
+
+$IMAKE -T$ARJUNA_IMAKE_TEMPLATE $ARJUNA_IMAKE_INCLUDE $ARJUNA_IMAKE_FLAGS
+$MV Makefile Makefile.sed;$SED -e '/^COMMENT$/s//#/' -e '/^COMMENT /s//# /' < Makefile.sed > Makefile;$RM Makefile.sed

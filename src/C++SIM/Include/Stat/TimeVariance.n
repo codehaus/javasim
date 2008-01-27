@@ -1,0 +1,41 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#ifndef PROCESS_H_
+#  include <ClassLib/Process.h>
+#endif
+
+#if defined(NO_INLINES) && !defined(TIMEVARIANCE_CC_)
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF void TimeVariance::operator+= (double value)
+{
+    setValue(value);
+}
+
+INLINEF double TimeVariance::area () const
+{
+    return (currentValue * (Process::CurrentTime() - stime));
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

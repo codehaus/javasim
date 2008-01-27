@@ -1,0 +1,38 @@
+COMMENT
+COMMENT Copyright (C) 1993
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.4 1996/12/04 15:07:55 nmcl Exp $
+COMMENT
+
+#define IHaveSubDirs
+
+SetSubDirectorys(Include Common Contrib ClassLib Event SimSet Stat lib bin)
+
+PrintConfig
+
+PrintEnviron
+
+all depend install ::
+
+install.local :: INSTALL_TOPDIR_VAR
+	-CHMOD_VAR ugo+rx INSTALL_TOPDIR_VAR
+
+CreateInstallTopDirectory(lib)
+
+MakeRelDirectoryDependency(ClassLib)
+MakeRelDirectoryDependency(Common)
+MakeRelDirectoryDependency(Event)
+MakeRelDirectoryDependency(SimSet)
+MakeRelDirectoryDependency(Stat)
+MakeRelDirectoryDependency(Contrib)
+MakeRelDirectoryDependency(Tests)
+MakeRelDirectoryDependency(lib)
+
+purge.local ::
+	$(RM) Examples/MakefileBoot Tests/MakefileBoot
+

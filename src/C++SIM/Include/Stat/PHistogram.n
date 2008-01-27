@@ -1,0 +1,114 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+#ifndef BOOLEAN_H_
+#  include <Common/Boolean.h>
+#endif
+
+
+#if defined(NO_INLINES) && !defined(PHISTOGRAM_CC_)
+
+extern ostream& operator<< (ostream& strm, const PrecisionHistogram& ph);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+// the bucket inlines
+
+INLINEF Boolean Bucket::operator== (double value) const
+{
+    return (Boolean) (name == value);
+}
+
+INLINEF Boolean Bucket::operator> (double value) const
+{
+    return (Boolean) (name > value);
+}
+
+INLINEF Boolean Bucket::operator>= (double value) const
+{
+    return (Boolean) (name >= value);
+}
+
+INLINEF Boolean Bucket::operator< (double value) const
+{
+    return (Boolean) (name < value);
+}
+
+INLINEF Boolean Bucket::operator<= (double value) const
+{
+    return (Boolean) (name <= value);
+}
+
+INLINEF double Bucket::operator() () const
+{
+    return name;
+}
+
+INLINEF void Bucket::operator+= (long value)
+{
+    numberOfEntries += value;
+}
+
+INLINEF long Bucket::size () const
+{
+    return numberOfEntries;
+}
+
+INLINEF double Bucket::Name () const
+{
+    return name;
+}
+
+INLINEF Bucket* Bucket::cdr () const
+{
+    return next;
+}
+
+INLINEF void Bucket::setCdr (Bucket* n)
+{
+    next = n;
+}
+
+
+// the real histogram inlines
+
+INLINEF void PrecisionHistogram::operator+= (double value)
+{
+    setValue(value);
+}
+
+INLINEF long PrecisionHistogram::numberOfBuckets () const
+{
+    return length;
+}
+
+INLINEF Boolean PrecisionHistogram::isPresent (double value)
+{
+    double dummy = 0.0;
+    return sizeByName(value, dummy);  
+}
+
+INLINEF ostream& operator<< (ostream& strm, const PrecisionHistogram& ph)
+{
+    return ph.print(strm);
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

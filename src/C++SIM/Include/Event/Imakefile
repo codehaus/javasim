@@ -1,0 +1,18 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.2 1995/04/19 11:15:54 nmcl Exp $
+COMMENT
+
+CreateInstallTopDirectory(include)
+CreateInstallDirectory(include,Event)
+
+InstallFile(include/Event,Entity.h)
+InstallFile(include/Event,Entity.n)
+InstallFile(include/Event,Semaphore.h)
+InstallFile(include/Event,TriggerQueue.h)

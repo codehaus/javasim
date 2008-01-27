@@ -1,0 +1,29 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.6 1998/10/01 08:20:54 nmcl Exp $
+COMMENT
+
+CreateInstallTopDirectory(include)
+CreateInstallDirectory(include,Stat)
+
+InstallFile(include/Stat,Mean.h)
+InstallFile(include/Stat,Mean.n)
+InstallFile(include/Stat,Pareto.h)
+InstallFile(include/Stat,Variance.h)
+InstallFile(include/Stat,Variance.n)
+InstallFile(include/Stat,TimeVariance.h)
+InstallFile(include/Stat,TimeVariance.n)
+InstallFile(include/Stat,Histogram.h)
+InstallFile(include/Stat,Histogram.n)
+InstallFile(include/Stat,PHistogram.h)
+InstallFile(include/Stat,PHistogram.n)
+InstallFile(include/Stat,SHistogram.h)
+InstallFile(include/Stat,SHistogram.n)
+InstallFile(include/Stat,Quantile.h)
+InstallFile(include/Stat,Quantile.n)

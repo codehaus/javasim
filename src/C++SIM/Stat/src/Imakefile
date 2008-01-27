@@ -1,0 +1,45 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.7 1998/10/01 08:20:55 nmcl Exp $
+COMMENT
+
+LIB	= $(LIBSTAT)
+
+SOURCES = Mean.cc \
+	  Pareto.cc \
+	  Variance.cc \
+	  TimeVariance.cc \
+	  PHistogram.cc \
+	  Histogram.cc \
+	  SHistogram.cc \
+	  Quantile.cc
+
+OBJECTS = Mean.o \
+	  Pareto.o \
+	  Variance.o \
+	  TimeVariance.o \
+	  PHistogram.o \
+	  Histogram.o \
+	  SHistogram.o \
+	  Quantile.o
+
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../include)
+
+AllTarget($(LIB))
+
+MakeLibrary($(LIB),$(OBJECTS))
+
+MakeObjectCPLUSPLUS(Mean,NOPARAM)
+MakeObjectCPLUSPLUS(Pareto,NOPARAM)
+MakeObjectCPLUSPLUS(Variance,NOPARAM)
+MakeObjectCPLUSPLUS(TimeVariance,NOPARAM)
+MakeObjectCPLUSPLUS(Histogram,NOPARAM)
+MakeObjectCPLUSPLUS(PHistogram,NOPARAM)
+MakeObjectCPLUSPLUS(SHistogram,NOPARAM)
+MakeObjectCPLUSPLUS(Quantile,NOPARAM)

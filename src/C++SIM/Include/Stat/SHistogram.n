@@ -1,0 +1,44 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#if defined(NO_INLINES) && !defined(SHISTOGRAM_CC_)
+
+extern ostream& operator<< (ostream& strm, const SimpleHistogram& s);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF double SimpleHistogram::Width () const
+{
+    return width;
+}
+
+INLINEF void SimpleHistogram::operator+= (double value)
+{
+    setValue(value);
+}
+
+INLINEF ostream& operator<< (ostream& strm, const SimpleHistogram& s)
+{
+    return s.print(strm);
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

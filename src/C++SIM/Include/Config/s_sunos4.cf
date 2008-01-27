@@ -1,0 +1,19 @@
+/*
+ * Copyright (C) 1993
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ *
+ * $Id: s_sunos4.cf,v 1.3 1995/07/19 11:23:38 nmcl Exp $
+ */
+
+/*
+ * s_sunos4.cf
+ */
+
+#define MAY_NEED_GCC_PROTOTYPES
+
+#define SYSTEM_SPECIFIC_FLAGS -DHAVE_MMAP -DHIDE_FCNTL_PROTO -DBROKEN_WCHAR_T
+#define SYSTEM_SPECIFIC_LIBRARIES -lm

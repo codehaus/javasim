@@ -1,0 +1,32 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT 
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.2 1995/04/19 11:16:15 nmcl Exp $
+COMMENT
+
+SOURCES  = Element.cc \
+	   Set.cc \
+	   TestSet.cc
+
+OBJECTS  = Element.o \
+	   Set.o \
+	   TestSet.o
+
+LIBRARIES = $(LIBSIMSET) $(LIBCOMMON)
+
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES))
+
+AllTarget(TestSet)
+
+MakeProgramCPLUSPLUS(TestSet,$(OBJECTS) $(LIBRARIES),NOPARAM)
+
+MakeObjectCPLUSPLUS(TestSet,NOPARAM)
+MakeObjectCPLUSPLUS(Element,NOPARAM)
+MakeObjectCPLUSPLUS(Set,NOPARAM)
+
+TidyTarget(TestSet)

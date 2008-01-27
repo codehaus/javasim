@@ -1,0 +1,55 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ *
+ * $Id: Entity.n,v 1.3 1996/04/24 09:28:48 nmcl Exp $
+ */
+
+#ifndef SEMAPHORE_H_
+#  include <Event/Semaphore.h>
+#endif
+
+#if defined(NO_INLINES) && !defined(ENTITY_CC_)
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+INLINEF void Entity::trigger ()
+{
+    _triggered = TRUE;
+}
+
+/*
+ * Currently, a process which is waiting on a semaphore cannot be
+ * interrupted - its wait status is not set.
+ */
+
+INLINEF void Entity::WaitForSemaphore (Semaphore& _sem)
+{
+#ifdef DEBUG
+    debug_stream << FUNCTIONS << FAC_ENTITY << VIS_PROTECTED;
+    debug_stream << "void Entity::WaitForSemaphore (Semaphore& _sem)" << endl;
+#endif
+    
+    _sem.Get(this);
+}
+
+INLINEF Boolean Entity::isWaiting () const
+{
+    return _waiting;
+}
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

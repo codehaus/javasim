@@ -1,0 +1,35 @@
+/*
+ * Copyright (C) 1994, 1995, 1996, 1997
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ *
+ * $Id: HeapIterator.n,v 1.4 1996/12/09 10:09:55 nmcl Exp $
+ */
+
+#ifndef HEAPELEMENT_H_
+#  include "HeapElement.h"
+#endif
+
+#if defined(NO_INLINES) && !defined(HEAPITERATOR_CC_)
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF HeapElement* HeapIterator::current () const { return currp; }
+
+INLINEF long HeapIterator::bucketName () const { return currp->bucketName(); }
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

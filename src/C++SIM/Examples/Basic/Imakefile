@@ -1,0 +1,44 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT 
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.5 1998/08/28 14:19:47 nmcl Exp $
+COMMENT
+
+SOURCES  = Arrivals.cc \
+	   Breaks.cc \
+	   Job.cc \
+	   Machine.cc \
+	   MachineShop.cc \
+	   Main.cc \
+	   Queue.cc
+
+OBJECTS  = Arrivals.o \
+	   Breaks.o \
+	   Job.o \
+	   Machine.o \
+	   MachineShop.o \
+	   Main.o \
+	   Queue.o
+
+LIBRARIES = $(LIBCONTRIB) $(LIBCPPSIM) $(LIBCONTRIB) $(LIBSTAT) $(LIBCPPSIM) $(LIBCOMMON)
+
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES))
+
+AllTarget(Main)
+
+MakeProgramCPLUSPLUS(Main,$(OBJECTS) $(LIBRARIES),NOPARAM)
+
+MakeObjectCPLUSPLUS(Arrivals,NOPARAM)
+MakeObjectCPLUSPLUS(Breaks,NOPARAM)
+MakeObjectCPLUSPLUS(Job,NOPARAM)
+MakeObjectCPLUSPLUS(Machine,NOPARAM)
+MakeObjectCPLUSPLUS(MachineShop,NOPARAM)
+MakeObjectCPLUSPLUS(Main,NOPARAM)
+MakeObjectCPLUSPLUS(Queue,NOPARAM)
+
+TidyTarget(Main)

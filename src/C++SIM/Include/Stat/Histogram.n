@@ -1,0 +1,39 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#if defined(NO_INLINES) && !defined(HISTOGRAM_CC_)
+
+extern ostream& operator<< (ostream& strm, const Histogram& h);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF void Histogram::operator+= (double value)
+{
+    setValue(value);
+}
+
+INLINEF ostream& operator<< (ostream& strm, const Histogram& h)
+{
+    return h.print(strm);
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

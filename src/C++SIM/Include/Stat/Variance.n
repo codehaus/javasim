@@ -1,0 +1,48 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#include <math.h>
+
+#if defined(NO_INLINES) && !defined(VARIANCE_CC_)
+
+extern ostream& operator<< (ostream& strm, const Variance& v);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF void Variance::operator+= (double value)
+{
+    setValue(value);
+}
+
+INLINEF double Variance::stdDev () const
+{
+    if (_Number == 0 || variance() <= 0)
+	return 0.0;
+    else
+	return sqrt(variance());
+}
+
+INLINEF ostream& operator<< (ostream& strm, const Variance& v)
+{
+    return v.print(strm);
+}
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

@@ -1,0 +1,41 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#if defined(NO_INLINES) && !defined(HEAD_CC_)
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+INLINEF Link* Head::First () const
+{
+    return Suc();
+}
+
+INLINEF Link* Head::Last () const
+{
+    return Pred();
+}
+
+INLINEF Boolean Head::Empty () const
+{
+    return (Boolean) (Cardinal() == 0);
+}
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif
+

@@ -1,0 +1,19 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.3 1995/04/19 11:15:56 nmcl Exp $
+COMMENT
+
+CreateInstallTopDirectory(include)
+CreateInstallDirectory(include,SimSet)
+
+InstallFile(include/SimSet,Head.h)
+InstallFile(include/SimSet,Head.n)
+InstallFile(include/SimSet,Link.h)
+InstallFile(include/SimSet,Link.n)
+InstallFile(include/SimSet,Linkage.h)

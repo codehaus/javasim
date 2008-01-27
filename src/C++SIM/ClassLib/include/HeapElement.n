@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 1994, 1995, 1996, 1997
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ *
+ * $Id: HeapElement.n,v 1.4 1996/12/09 10:09:54 nmcl Exp $
+ */
+
+#if defined(NO_INLINES) && !defined(HEAPELEMENT_CC_)
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF ProcessList* HeapElement::car () const
+{
+    return proc;
+}
+
+INLINEF HeapElement* HeapElement::cdr () const
+{
+    return next;
+}
+
+INLINEF void HeapElement::SetfCdr (HeapElement* n)
+{
+    next = n;
+}
+
+INLINEF long HeapElement::bucketName () const
+{
+    return rangeTime;
+}
+
+INLINEF void HeapElement::setBucketName (long n)
+{
+    rangeTime = n;
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

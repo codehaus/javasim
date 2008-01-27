@@ -1,0 +1,36 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT 
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.6 1996/12/04 15:08:02 nmcl Exp $
+COMMENT
+
+SOURCES  = TestQueues.cc \
+	   Tester.cc \
+	   DummyProcess.cc
+
+OBJECTS  = TestQueues.o \
+	   Tester.o \
+	   DummyProcess.o
+
+LIBRARIES = $(LIBCONTRIB) $(LIBCPPSIM) $(LIBCONTRIB) $(LIBCPPSIM) $(LIBSTAT) $(LIBCOMMON)
+
+#ifdef Calendar_Queue
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../../ClassLib/include -I../../Contrib/Calendar/include)
+#else
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../../ClassLib/include)
+#endif
+
+AllTarget(TestQueues)
+
+MakeProgramCPLUSPLUS(TestQueues,$(OBJECTS) $(LIBRARIES),NOPARAM)
+
+MakeObjectCPLUSPLUS(TestQueues,NOPARAM)
+MakeObjectCPLUSPLUS(Tester,NOPARAM)
+MakeObjectCPLUSPLUS(DummyProcess,NOPARAM)
+
+TidyTarget(TestQueues)

@@ -1,0 +1,42 @@
+/*
+ * Copyright 1996 Commonwealth Scientific and Industrial Research
+ * Organisation, Australia
+ * The Commonwealth Scientific and Industrial Research Organisation makes
+ * no representation about the suitability of this software for any
+ * purpose.  It is provided "as is" without express or implied warranty.
+ * Available under the same conditions as the C++SIM public distribution.
+ *
+ * Parts of this file
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#if defined(NO_INLINES) && !defined(QUICKTHREAD_CC_)
+
+extern ostream& operator<< (ostream& strm, const Quick_Thread& lt);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF ostream& operator<< (ostream& strm, const Quick_Thread& lt)
+{
+    return lt.print(strm);
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

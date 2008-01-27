@@ -1,0 +1,31 @@
+COMMENT 
+COMMENT Copyright (C) 1993
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.7 1998/07/23 13:04:52 nmcl Exp $
+COMMENT
+
+AllTarget(arjmkmf arjmkmf_install)
+
+CreateInstallTopDirectory(bin)
+InstallProgramAs(bin,arjmkmf_install,arjmkmf)
+InstallProgram(bin,makedepend)
+InstallProgram(bin,stripdepend)
+
+arjmkmf_install : arjmkmf.tmpl
+	@echo Creating $@
+	COMMAND_PREFIX(sed) -e "s;CONFIGDIRECTORY;"$(INSTALL_TOPDIR)"/include;" -e "s;IMAKEFLAGS;-DUseInstalled -DTOPDIR_DEFAULT="$(INSTALL_TOPDIR)";" < arjmkmf.tmpl > arjmkmf_install
+
+	COMMAND_PREFIX(CHMOD_VAR) ug+rx arjmkmf_install
+
+arjmkmf : arjmkmf.tmpl
+	@echo Creating $@
+	COMMAND_PREFIX(sed) -e "s;CONFIGDIRECTORY;"$(TOPDIR)"/Include;" -e "s;IMAKEFLAGS;-DTOPDIR_DEFAULT="$(TOPDIR)";" < arjmkmf.tmpl > arjmkmf
+
+	COMMAND_PREFIX(CHMOD_VAR) ug+rx arjmkmf
+
+TidyTarget(arjmkmf arjmkmf_install)

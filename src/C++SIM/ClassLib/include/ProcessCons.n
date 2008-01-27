@@ -1,0 +1,42 @@
+/*
+ * Copyright (C) 1994, 1995, 1996, 1997
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ *
+ * $Id: ProcessCons.n,v 1.2 1996/12/09 10:09:56 nmcl Exp $
+ */
+
+#if defined(NO_INLINES) && !defined(PROCESSCONS_CC_)
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+INLINEF Process *ProcessCons::car ()
+{
+    return Proc;
+}
+
+INLINEF ProcessCons *ProcessCons::cdr ()
+{
+    return Next;
+}
+
+INLINEF void ProcessCons::SetfCdr (ProcessCons *n)
+{
+    Next = n;
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

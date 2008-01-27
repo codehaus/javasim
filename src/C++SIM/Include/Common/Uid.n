@@ -1,0 +1,50 @@
+/*
+ * Copyright (C) 1993
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ *
+ * $Id: Uid.n,v 1.1 1998/07/15 16:00:32 nmcl Exp $
+ */
+
+#if defined(NO_INLINES) && !defined(UID_CC_)
+
+class ostream;
+
+extern ostream& operator<< (ostream& strm, const Uid& u);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+INLINEF ostream& operator<<  ( ostream& strm, const Uid& u )
+{
+    return u.print (strm);
+}
+
+INLINEF Boolean Uid::valid () const
+{
+    return _valid;
+}
+
+/*
+ * Function to return a value that can be used as an index in a hash table
+ * which has been ordered using Uids. 
+ */ 
+
+INLINEF unsigned long Uid::hash () const
+{
+    return _hash;
+}
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

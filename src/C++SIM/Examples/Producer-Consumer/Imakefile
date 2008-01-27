@@ -1,0 +1,41 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT 
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.2 1996/12/20 15:29:49 nmcl Exp $
+COMMENT
+
+SOURCES  = Producer.cc \
+	   Consumer.cc \
+	   Controller.cc \
+	   Queue.cc \
+	   Job.cc \
+	   Main.cc
+
+OBJECTS  = Producer.o \
+	   Consumer.o \
+	   Controller.o \
+	   Queue.o \
+	   Job.o \
+	   Main.o
+
+LIBRARIES = $(LIBEVENT) $(LIBCONTRIB) $(LIBCPPSIM) $(LIBCONTRIB) $(LIBCPPSIM) $(LIBCOMMON)
+
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES))
+
+AllTarget(Main)
+
+MakeProgramCPLUSPLUS(Main,$(OBJECTS) $(LIBRARIES),NOPARAM)
+
+MakeObjectCPLUSPLUS(Producer,NOPARAM)
+MakeObjectCPLUSPLUS(Consumer,NOPARAM)
+MakeObjectCPLUSPLUS(Controller,NOPARAM)
+MakeObjectCPLUSPLUS(Queue,NOPARAM)
+MakeObjectCPLUSPLUS(Job,NOPARAM)
+MakeObjectCPLUSPLUS(Main,NOPARAM)
+
+TidyTarget(Main)

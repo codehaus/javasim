@@ -1,0 +1,34 @@
+COMMENT
+COMMENT Copyright 1996 Commonwealth Scientific and Industrial Research
+COMMENT Organisation, Australia
+COMMENT The Commonwealth Scientific and Industrial Research Organisation makes
+COMMENT no representation about the suitability of this software for any
+COMMENT purpose.  It is provided "as is" without express or implied warranty.
+COMMENT Available under the same conditions as the C++SIM public distribution.
+COMMENT
+COMMENT Parts of this file
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+
+LIB	= $(LIBCONTRIB)
+
+SOURCES = quick_thread.cc
+
+OBJECTS = quick_thread.o
+
+#ifdef USE_RZSTACKS
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../include -I../../RZStacks/include -I../include)
+#else
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../include -I../include)
+#endif
+
+AllTarget($(LIB))
+
+MakeLibrary($(LIB),$(OBJECTS))
+
+MakeObjectCPLUSPLUS(quick_thread,NOPARAM)

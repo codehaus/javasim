@@ -1,0 +1,39 @@
+/*
+ * Copyright (C) 1994
+ *
+ * Department of Computing Science,
+ * The University,
+ * Newcastle upon Tyne,
+ * UK.
+ */
+
+
+#if defined(NO_INLINES) && !defined(QUANTILE_CC_)
+
+extern ostream& operator<< (ostream& strm, const Quantile& q);
+
+#else
+
+#ifndef NO_INLINES
+#  define INLINEF inline
+#else
+#  define INLINEF
+#endif
+
+
+INLINEF double Quantile::range () const
+{
+    return qProb;
+}
+
+INLINEF ostream& operator<< (ostream& strm, const Quantile& q)
+{
+    return q.print(strm);
+}
+
+
+#ifdef INLINEF
+#  undef INLINEF
+#endif
+
+#endif

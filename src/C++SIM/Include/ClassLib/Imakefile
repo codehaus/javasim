@@ -1,0 +1,19 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.13 1997/02/10 12:09:46 nmcl Exp $
+COMMENT
+
+CreateInstallTopDirectory(include)
+CreateInstallDirectory(include,ClassLib)
+
+InstallFile(include/ClassLib,Process.h)
+InstallFile(include/ClassLib,Process.n)
+InstallFile(include/ClassLib,Random.h)
+InstallFile(include/ClassLib,reset.h)
+InstallFile(include/ClassLib,thread.h)

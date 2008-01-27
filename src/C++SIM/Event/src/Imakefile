@@ -1,0 +1,36 @@
+COMMENT
+COMMENT Copyright (C) 1994
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.3 1996/12/09 10:10:00 nmcl Exp $
+COMMENT
+
+LIB	= $(LIBEVENT)
+
+SOURCES = Entity.cc \
+	  EntityList.cc \
+	  ListElement.cc \
+	  Semaphore.cc \
+	  TriggerQueue.cc
+
+OBJECTS = Entity.o \
+	  EntityList.o \
+	  ListElement.o \
+	  Semaphore.o \
+	  TriggerQueue.o
+
+SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../include -I../../ClassLib/include)
+
+AllTarget($(LIB))
+
+MakeLibrary($(LIB),$(OBJECTS))
+
+MakeObjectCPLUSPLUS(Entity,NOPARAM)
+MakeObjectCPLUSPLUS(EntityList,NOPARAM)
+MakeObjectCPLUSPLUS(ListElement,NOPARAM)
+MakeObjectCPLUSPLUS(Semaphore,NOPARAM)
+MakeObjectCPLUSPLUS(TriggerQueue,NOPARAM)

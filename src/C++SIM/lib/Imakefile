@@ -1,0 +1,28 @@
+COMMENT 
+COMMENT Copyright (C) 1993
+COMMENT
+COMMENT Department of Computing Science,
+COMMENT The University,
+COMMENT Newcastle upon Tyne,
+COMMENT UK.
+COMMENT
+COMMENT $Id: Imakefile,v 1.2 1997/03/18 13:53:27 nmcl Exp $
+COMMENT
+
+CreateInstallTopDirectory(lib)
+InstallLibrary(lib,libC++SIM.a)
+InstallLibrary(lib,libEvent.a)
+InstallLibrary(lib,libCommon.a)
+InstallLibrary(lib,libSimSet.a)
+InstallLibrary(lib,libStat.a)
+
+#ifdef BUILD_CONTRIB
+InstallLibrary(lib,libContrib.a)
+
+TidyTarget($(LIBCPPSIM) $(LIBEVENT) $(LIBCOMMON) $(LIBSIMSET) $(LIBSTAT) $(LIBCONTRIB))
+
+#else
+
+TidyTarget($(LIBCPPSIM) $(LIBEVENT) $(LIBCOMMON) $(LIBSIMSET) $(LIBSTAT))
+
+#endif
