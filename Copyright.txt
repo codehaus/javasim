@@ -1,6 +1,5 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2006, JBoss Inc., and others contributors as indicated 
+ * Copyright 1990-2008, Mark Little, and others contributors as indicated 
  * by the @authors tag. All rights reserved. 
  * See the copyright.txt in the distribution for a
  * full listing of individual contributors. 
@@ -15,5 +14,5 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
  * MA  02110-1301, USA.
  * 
- * (C) 2005-2006, 2007,
+ * (C) 1990-2008,
  */
