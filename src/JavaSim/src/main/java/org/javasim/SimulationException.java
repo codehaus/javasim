@@ -22,7 +22,8 @@ package org.javasim;
 
 public class SimulationException extends Exception
 {
-
+    public static final long serialVersionUID = 0xdeadbeef;
+    
     public SimulationException()
     {
         super();

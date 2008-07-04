@@ -35,7 +35,7 @@ public class SimulationEntity extends SimulationProcess
      * resumption when the interrupted process has finished).
      */
 
-    public void Interrupt (SimulationEntity toInterrupt, boolean immediate)
+    public void interrupt (SimulationEntity toInterrupt, boolean immediate)
             throws SimulationException, RestartException
     {
         if (toInterrupt.terminated())
@@ -53,7 +53,7 @@ public class SimulationEntity extends SimulationProcess
 
         // will take over when this process is suspended
 
-        toInterrupt.ReActivateAt(SimulationProcess.CurrentTime(), true);
+        toInterrupt.reactivateAt(SimulationProcess.currentTime(), true);
 
         /*
          * Put "this" on to queue and suspend so that interrupted process can
@@ -61,7 +61,7 @@ public class SimulationEntity extends SimulationProcess
          */
 
         if (immediate)
-            ReActivateAt(SimulationProcess.CurrentTime());
+            reactivateAt(SimulationProcess.currentTime());
     }
 
     public final void trigger ()
@@ -86,8 +86,8 @@ public class SimulationEntity extends SimulationProcess
 
             try
             {
-                _isWaiting.Cancel();
-                _isWaiting.ReActivateAt(SimulationProcess.CurrentTime(), true);
+                _isWaiting.cancel();
+                _isWaiting.reactivateAt(SimulationProcess.currentTime(), true);
             }
             catch (RestartException e)
             {
@@ -115,14 +115,14 @@ public class SimulationEntity extends SimulationProcess
      * the InterruptedException is thrown.
      */
 
-    protected void Wait (double waitTime) throws SimulationException,
+    protected void timedWait (double waitTime) throws SimulationException,
             RestartException, InterruptedException
     {
         _waiting = true;
 
         try
         {
-            Hold(waitTime);
+            hold(waitTime);
         }
         catch (SimulationException e)
         {
@@ -145,7 +145,7 @@ public class SimulationEntity extends SimulationProcess
      * parameter is true then the controller is reactivated immediately.
      */
 
-    protected void WaitFor (SimulationEntity controller, boolean reAct)
+    protected void waitFor (SimulationEntity controller, boolean reAct)
             throws SimulationException, RestartException, InterruptedException
     {
         if (controller == this) // can't wait on self!
@@ -158,7 +158,7 @@ public class SimulationEntity extends SimulationProcess
         try
         {
             if (reAct)
-                controller.ReActivateAt(SimulationProcess.CurrentTime(), true);
+                controller.reactivateAt(SimulationProcess.currentTime(), true);
         }
         catch (SimulationException e)
         {
@@ -168,7 +168,7 @@ public class SimulationEntity extends SimulationProcess
 
         // we don't go back on to queue as controller will wake us
 
-        Cancel();
+        cancel();
 
         _waiting = _interrupted = false;
 
@@ -185,10 +185,10 @@ public class SimulationEntity extends SimulationProcess
      * will not be reactivated immediately.
      */
 
-    protected void WaitFor (SimulationEntity controller)
+    protected void waitFor (SimulationEntity controller)
             throws SimulationException, RestartException, InterruptedException
     {
-        WaitFor(controller, false);
+        waitFor(controller, false);
     }
 
     /**
@@ -198,7 +198,7 @@ public class SimulationEntity extends SimulationProcess
      * rather than being triggered.
      */
 
-    protected void WaitForTrigger (TriggerQueue _queue)
+    protected void waitForTrigger (TriggerQueue _queue)
             throws SimulationException, RestartException, InterruptedException
     {
         _queue.insert(this);
@@ -206,7 +206,7 @@ public class SimulationEntity extends SimulationProcess
         _interrupted = false;
         _waiting = true;
 
-        Cancel(); // remove from queue and suspend
+        cancel(); // remove from queue and suspend
 
         // indicate whether this was triggered successfully or interrupted
 
@@ -221,9 +221,9 @@ public class SimulationEntity extends SimulationProcess
      * interrupted - its wait status is not set.
      */
 
-    protected void WaitForSemaphore (Semaphore _sem) throws RestartException
+    protected void waitForSemaphore (Semaphore _sem) throws RestartException
     {
-        _sem.Get(this);
+        _sem.get(this);
     }
 
     protected SimulationEntity _isWaiting;

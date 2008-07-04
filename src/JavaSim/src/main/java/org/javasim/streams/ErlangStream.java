@@ -61,7 +61,7 @@ public class ErlangStream extends RandomStream
         double z = Mean / StandardDeviation;
         k = (long) (z * z);
         for (int ss = 0; ss < StreamSelect * 1000; ss++)
-            Uniform();
+            uniform();
     }
 
     /**
@@ -81,7 +81,7 @@ public class ErlangStream extends RandomStream
         double z = Mean / StandardDeviation;
         k = (long) (z * z);
         for (int ss = 0; ss < StreamSelect * 1000; ss++)
-            Uniform();
+            uniform();
     }
 
     /**
@@ -92,7 +92,7 @@ public class ErlangStream extends RandomStream
     {
         double z = 1.0;
         for (int i = 0; i < k; i++)
-            z *= Uniform();
+            z *= uniform();
 
         return -(Mean / k) * Math.log(z);
     }

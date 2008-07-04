@@ -41,7 +41,7 @@ public class Arrivals extends SimulationProcess
         {
             try
             {
-                Hold(InterArrivalTime.getNumber());
+                hold(InterArrivalTime.getNumber());
             }
             catch (SimulationException e)
             {

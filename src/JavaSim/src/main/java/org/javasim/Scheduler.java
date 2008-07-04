@@ -33,14 +33,25 @@ package org.javasim;
 
 import java.util.NoSuchElementException;
 
+/**
+ * This is the scheduler: the heart of the simulation system.
+ * 
+ * Note: unlike in SIMULA, an active process is removed from the simulation
+ * queue prior to being activated.
+ * 
+ * @author marklittle
+ *
+ */
 public class Scheduler extends Thread
 {
 
     /**
-      Return the current simulation time.
+      * Get the current simulation time.\
+      * 
+      * @return the current simulation time.
       */
     
-    public static double CurrentTime ()
+    public static double currentTime ()
     {
 	return Scheduler.SimulatedTime;
     }
@@ -53,6 +64,8 @@ public class Scheduler extends Thread
      * application should catch. It should then perform any work necessary
      * to put the process back in a state ready for restarting the simulation
      * before calling Cancel on the process.
+     * 
+     * @throws SimulationException if an error occurs.
      */
     
     public static synchronized void reset () throws SimulationException
@@ -65,13 +78,13 @@ public class Scheduler extends Thread
 	// set resetting process to idle
 
 	Scheduler.unschedule(tmp); // remove from queue
-	tmp.passivate();
+	tmp.deactivate();
 
 	do
 	{
 	    try
 	    {
-		tmp = Scheduler.ReadyQueue.Remove();
+		tmp = Scheduler.ReadyQueue.remove();
 	    }
 	    catch (NoSuchElementException e)
 	    {
@@ -98,7 +111,7 @@ public class Scheduler extends Thread
 		 * to become ready to restart.
 		 */
 		
-		tmp.Resume();
+		tmp.resumeProcess();
 
 		/*
 		 * Wait for this process to become idle again.
@@ -124,6 +137,8 @@ public class Scheduler extends Thread
      * Is the simulation undergoing a reset? Processes should call this
      * method to determine whether the simulation is being reset. If it
      * is, then they should act accordingly.
+     * 
+     * @return <code>true</code> if the simulation is being reset, <code>false</code> otherwise.
      */
     
     public static synchronized boolean simulationReset ()
@@ -152,6 +167,13 @@ public class Scheduler extends Thread
 	Scheduler.schedulerRunning = true;
     }
 
+    /**
+     * Has the simulation started?
+     * 
+     * @return <code>true</code> if the simulation is running, <code>false</code>
+     * otherwise.
+     */
+    
     protected static synchronized boolean simulationStarted ()
     {
 	return Scheduler.schedulerRunning;
@@ -176,7 +198,7 @@ public class Scheduler extends Thread
 	    
 	    try
 	    {
-		SimulationProcess.Current = Scheduler.ReadyQueue.Remove();
+		SimulationProcess.Current = Scheduler.ReadyQueue.remove();
 	    }
 	    catch (NoSuchElementException e)
 	    {
@@ -191,7 +213,7 @@ public class Scheduler extends Thread
 
 	    if (p != SimulationProcess.Current)
 	    {
-		SimulationProcess.Current.Resume();
+		SimulationProcess.Current.resumeProcess();
 		
 		return true;
 	    }
@@ -206,13 +228,13 @@ public class Scheduler extends Thread
     {
 	try
 	{
-	    Scheduler.ReadyQueue.Remove(p); // remove from queue
+	    Scheduler.ReadyQueue.remove(p); // remove from queue
 	}
 	catch (NoSuchElementException e)
 	{
 	}
 
-	p.passivate();
+	p.deactivate();
     }
 
     static SimulationProcessList getQueue ()

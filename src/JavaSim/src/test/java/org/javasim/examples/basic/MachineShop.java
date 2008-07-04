@@ -42,18 +42,18 @@ public class MachineShop extends SimulationProcess
             MachineShop.M = new Machine(8);
             Job J = new Job();
 
-            A.Activate();
+            A.activate();
 
             if (useBreaks)
             {
                 B = new Breaks();
-                B.Activate();
+                B.activate();
             }
 
             Scheduler.startSimulation();
 
             while (MachineShop.ProcessedJobs < 1000)
-                Hold(1000);
+                hold(1000);
 
             System.out.println("Total number of jobs present " + TotalJobs);
             System.out.println("Total number of jobs processed "
@@ -63,7 +63,7 @@ public class MachineShop extends SimulationProcess
                     + (TotalResponseTime / ProcessedJobs));
             System.out
                     .println("Probability that machine is working = "
-                            + ((MachineActiveTime - MachineFailedTime) / CurrentTime()));
+                            + ((MachineActiveTime - MachineFailedTime) / currentTime()));
             System.out.println("Probability that machine has failed = "
                     + (MachineFailedTime / MachineActiveTime));
             System.out.println("Average number of jobs present = "
@@ -87,9 +87,9 @@ public class MachineShop extends SimulationProcess
         }
     }
 
-    public void Await ()
+    public void await ()
     {
-        this.Resume();
+        this.resumeProcess();
         SimulationProcess.mainSuspend();
     }
 

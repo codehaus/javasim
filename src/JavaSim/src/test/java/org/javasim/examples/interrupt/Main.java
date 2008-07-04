@@ -27,7 +27,7 @@ public class Main
     {
         MachineShop m = new MachineShop();
 
-        m.Await();
+        m.await();
 
         System.exit(0);
     }

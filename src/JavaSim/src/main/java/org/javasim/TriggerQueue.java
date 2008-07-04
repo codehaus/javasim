@@ -69,7 +69,7 @@ public class TriggerQueue
 
         try
         {
-            removed.ReActivateAt(SimulationProcess.CurrentTime());
+            removed.reactivateAt(SimulationProcess.currentTime());
         }
         catch (RestartException e)
         {

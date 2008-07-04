@@ -52,7 +52,7 @@ public class Bucket
     public Bucket(Bucket b)
     {
         numberOfEntries = b.size();
-        name = b.Name();
+        name = b.name();
         next = null;
     }
 
@@ -120,7 +120,7 @@ public class Bucket
      * Returns the name of the bucket.
      */
 
-    public double Name ()
+    public double name ()
     {
         return name;
     }

@@ -30,12 +30,12 @@ public class SimulationProcessList
         Head = null;
     }
 
-    public synchronized void Insert (SimulationProcess p)
+    public synchronized void insert (SimulationProcess p)
     {
-        Insert(p, false);
+        insert(p, false);
     }
 
-    public synchronized void Insert (SimulationProcess p, boolean prior)
+    public synchronized void insert (SimulationProcess p, boolean prior)
     {
         // If list is empty, insert at head
 
@@ -57,7 +57,7 @@ public class SimulationProcessList
             {
                 if (q.evtime() >= p.evtime())
                 {
-                    InsertBefore(p, q);
+                    insertBefore(p, q);
                     return;
                 }
             }
@@ -65,7 +65,7 @@ public class SimulationProcessList
             {
                 if (q.evtime() > p.evtime())
                 {
-                    InsertBefore(p, q);
+                    insertBefore(p, q);
                     return;
                 }
             }
@@ -73,10 +73,10 @@ public class SimulationProcessList
 
         // Got to insert at the end (currently pointed at by 'prev')
 
-        InsertAfter(p, prev);
+        insertAfter(p, prev);
     }
 
-    public synchronized boolean InsertBefore (SimulationProcess ToInsert,
+    public synchronized boolean insertBefore (SimulationProcess ToInsert,
             SimulationProcess Before)
     {
         for (SimulationProcessCons prev = null, p = Head; p != null; prev = p, p = p
@@ -87,7 +87,7 @@ public class SimulationProcessList
                 SimulationProcessCons newcons = new SimulationProcessCons(
                         ToInsert, p);
                 if (prev != null)
-                    prev.SetfCdr(newcons);
+                    prev.setfCdr(newcons);
                 else
                     Head = newcons;
 
@@ -98,7 +98,7 @@ public class SimulationProcessList
         return false;
     }
 
-    public synchronized boolean InsertAfter (SimulationProcess ToInsert,
+    public synchronized boolean insertAfter (SimulationProcess ToInsert,
             SimulationProcess After)
     {
         for (SimulationProcessCons p = Head; p != null; p = p.cdr())
@@ -106,14 +106,14 @@ public class SimulationProcessList
             {
                 SimulationProcessCons newcons = new SimulationProcessCons(
                         ToInsert, p.cdr());
-                p.SetfCdr(newcons);
+                p.setfCdr(newcons);
                 return true;
             }
 
         return false;
     }
 
-    public synchronized SimulationProcess Remove (SimulationProcess element)
+    public synchronized SimulationProcess remove (SimulationProcess element)
             throws NoSuchElementException
     {
         // Take care of boundary condition - empty list
@@ -133,7 +133,7 @@ public class SimulationProcessList
                 // unlink the cons cell for the element we're removing
 
                 if (prev != null)
-                    prev.SetfCdr(ptr.cdr());
+                    prev.setfCdr(ptr.cdr());
                 else
                     Head = ptr.cdr();
 
@@ -147,13 +147,13 @@ public class SimulationProcessList
         throw (new NoSuchElementException());
     }
 
-    public synchronized SimulationProcess Remove ()
+    public synchronized SimulationProcess remove ()
             throws NoSuchElementException
     {
         // Change unspecified element to "remove head of list" request
 
         if (Head != null)
-            return (Remove(Head.car()));
+            return (remove(Head.car()));
         else
             throw (new NoSuchElementException());
     }
@@ -249,7 +249,7 @@ class SimulationProcessCons
         return Next;
     }
 
-    public final void SetfCdr (SimulationProcessCons n)
+    public final void setfCdr (SimulationProcessCons n)
     {
         Next = n;
     }

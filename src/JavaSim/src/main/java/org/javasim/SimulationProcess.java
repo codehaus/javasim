@@ -58,7 +58,7 @@ public class SimulationProcess extends Thread
                 }
             }
 
-            SimulationProcess.allProcesses.Remove(this);
+            SimulationProcess.allProcesses.remove(this);
         }
     }
 
@@ -66,16 +66,16 @@ public class SimulationProcess extends Thread
      * Return the current simulation time.
      */
 
-    public final double Time ()
+    public final double time ()
     {
-        return SimulationProcess.CurrentTime();
+        return SimulationProcess.currentTime();
     }
 
     /**
      * Return the next simulation process which will run.
      */
 
-    public synchronized SimulationProcess next_ev ()
+    public synchronized SimulationProcess nextEv ()
             throws SimulationException, NoSuchElementException
     {
         if (!idle())
@@ -99,7 +99,7 @@ public class SimulationProcess extends Thread
      * running, or on the scheduler queue.
      */
 
-    public void ActivateBefore (SimulationProcess p)
+    public void activateBefore (SimulationProcess p)
             throws SimulationException, RestartException
     {
         if (Terminated || !idle())
@@ -107,7 +107,7 @@ public class SimulationProcess extends Thread
 
         Passivated = false;
 
-        if (Scheduler.getQueue().InsertBefore(this, p))
+        if (Scheduler.getQueue().insertBefore(this, p))
             wakeuptime = p.wakeuptime;
         else
             throw new SimulationException("'before' process is not scheduled.");
@@ -118,7 +118,7 @@ public class SimulationProcess extends Thread
      * running, or on the scheduler queue.
      */
 
-    public void ActivateAfter (SimulationProcess p) throws SimulationException,
+    public void activateAfter (SimulationProcess p) throws SimulationException,
             RestartException
     {
         if (Terminated || !idle())
@@ -126,7 +126,7 @@ public class SimulationProcess extends Thread
 
         Passivated = false;
 
-        if (Scheduler.getQueue().InsertAfter(this, p))
+        if (Scheduler.getQueue().insertAfter(this, p))
             wakeuptime = p.wakeuptime;
         else
             throw new SimulationException("'after' process is not scheduled.");
@@ -140,18 +140,18 @@ public class SimulationProcess extends Thread
      * the same simulation time.
      */
 
-    public void ActivateAt (double AtTime, boolean prior)
+    public void activateAt (double AtTime, boolean prior)
             throws SimulationException, RestartException
     {
         if (Terminated || !idle())
             return;
 
-        if (AtTime < SimulationProcess.CurrentTime())
+        if (AtTime < SimulationProcess.currentTime())
             throw new SimulationException("Invalid time " + AtTime);
 
         Passivated = false;
         wakeuptime = AtTime;
-        Scheduler.getQueue().Insert(this, prior);
+        Scheduler.getQueue().insert(this, prior);
     }
 
     /**
@@ -160,10 +160,10 @@ public class SimulationProcess extends Thread
      * or equal to, the current simulation time.
      */
 
-    public void ActivateAt (double AtTime) throws SimulationException,
+    public void activateAt (double AtTime) throws SimulationException,
             RestartException
     {
-        ActivateAt(AtTime, false);
+        activateAt(AtTime, false);
     }
 
     /**
@@ -174,7 +174,7 @@ public class SimulationProcess extends Thread
      * same simulation time.
      */
 
-    public void ActivateDelay (double Delay, boolean prior)
+    public void activateDelay (double Delay, boolean prior)
             throws SimulationException, RestartException
     {
         if (Terminated || !idle())
@@ -185,7 +185,7 @@ public class SimulationProcess extends Thread
 
         Passivated = false;
         wakeuptime = Scheduler.getSimulationTime() + Delay;
-        Scheduler.getQueue().Insert(this, prior);
+        Scheduler.getQueue().insert(this, prior);
     }
 
     /**
@@ -194,10 +194,10 @@ public class SimulationProcess extends Thread
      * be greater than, or equal to, zero.
      */
 
-    public void ActivateDelay (double Delay) throws SimulationException,
+    public void activateDelay (double Delay) throws SimulationException,
             RestartException
     {
-        ActivateDelay(Delay, false);
+        activateDelay(Delay, false);
     }
 
     /**
@@ -205,46 +205,46 @@ public class SimulationProcess extends Thread
      * not be running, or on the scheduler queue.
      */
 
-    public void Activate () throws SimulationException, RestartException
+    public void activate () throws SimulationException, RestartException
     {
         if (Terminated || !idle())
             return;
 
         Passivated = false;
-        wakeuptime = CurrentTime();
-        Scheduler.getQueue().Insert(this, true);
+        wakeuptime = currentTime();
+        Scheduler.getQueue().insert(this, true);
     }
 
     /**
      * Reactivate this process before process 'p'.
      */
 
-    public void ReActivateBefore (SimulationProcess p)
+    public void reactivateBefore (SimulationProcess p)
             throws SimulationException, RestartException
     {
         if (!idle())
             Scheduler.unschedule(this);
 
-        ActivateBefore(p);
+        activateBefore(p);
 
         if (SimulationProcess.Current == this)
-            Suspend();
+            suspendProcess();
     }
 
     /**
      * Reactivate this process after process 'p'.
      */
 
-    public void ReActivateAfter (SimulationProcess p)
+    public void reactivateAfter (SimulationProcess p)
             throws SimulationException, RestartException
     {
         if (!idle())
             Scheduler.unschedule(this);
 
-        ActivateAfter(p);
+        activateAfter(p);
 
         if (SimulationProcess.Current == this)
-            Suspend();
+            suspendProcess();
     }
 
     /**
@@ -253,17 +253,17 @@ public class SimulationProcess extends Thread
      * simulation queue before any other process with the same simulation time.
      */
 
-    public void ReActivateAt (double AtTime, boolean prior)
+    public void reactivateAt (double AtTime, boolean prior)
             throws SimulationException, RestartException
     {
         if (!idle())
             Scheduler.unschedule(this);
 
-        ActivateAt(AtTime, prior);
+        activateAt(AtTime, prior);
 
         if (SimulationProcess.Current == this)
         {
-            Suspend();
+            suspendProcess();
         }
     }
 
@@ -272,10 +272,10 @@ public class SimulationProcess extends Thread
      * be valid.
      */
 
-    public void ReActivateAt (double AtTime) throws SimulationException,
+    public void reactivateAt (double AtTime) throws SimulationException,
             RestartException
     {
-        ReActivateAt(AtTime, false);
+        reactivateAt(AtTime, false);
     }
 
     /**
@@ -284,48 +284,48 @@ public class SimulationProcess extends Thread
      * before any other process with the same simulation time.
      */
 
-    public void ReActivateDelay (double Delay, boolean prior)
+    public void reactivateDelay (double Delay, boolean prior)
             throws SimulationException, RestartException
     {
         if (!idle())
             Scheduler.unschedule(this);
 
-        ActivateDelay(Delay, prior);
+        activateDelay(Delay, prior);
 
         if (SimulationProcess.Current == this)
-            Suspend();
+            suspendProcess();
     }
 
     /**
      * Reactivate this process after 'Delay' units of simulation time.
      */
 
-    public void ReActivateDelay (double Delay) throws SimulationException,
+    public void reactivateDelay (double Delay) throws SimulationException,
             RestartException
     {
-        ReActivateDelay(Delay, false);
+        reactivateDelay(Delay, false);
     }
 
     /**
      * Reactivate this process at the current simulation time.
      */
 
-    public void ReActivate () throws SimulationException, RestartException
+    public void reactivate () throws SimulationException, RestartException
     {
         if (!idle())
             Scheduler.unschedule(this);
 
-        Activate();
+        activate();
 
         if (SimulationProcess.Current == this)
-            Suspend();
+            suspendProcess();
     }
 
     /**
      * Cancels next burst of activity, process becomes idle.
      */
 
-    public void Cancel () throws RestartException
+    public void cancel () throws RestartException
     {
         /*
          * We must suspend this process either by removing it from the scheduler
@@ -340,7 +340,7 @@ public class SimulationProcess extends Thread
             {
                 wakeuptime = SimulationProcess.Never;
                 Passivated = true;
-                Suspend();
+                suspendProcess();
             }
             else
             {
@@ -371,7 +371,7 @@ public class SimulationProcess extends Thread
             {
             }
 
-            SimulationProcess.allProcesses.Remove(this);
+            SimulationProcess.allProcesses.remove(this);
 
             stop();
         }
@@ -383,7 +383,7 @@ public class SimulationProcess extends Thread
 
     public synchronized boolean idle ()
     {
-        if (wakeuptime >= SimulationProcess.CurrentTime())
+        if (wakeuptime >= SimulationProcess.currentTime())
             return false;
         else
             return true;
@@ -423,7 +423,7 @@ public class SimulationProcess extends Thread
      * Return the current simulation time.
      */
 
-    public static double CurrentTime ()
+    public static double currentTime ()
     {
         return Scheduler.getSimulationTime();
     }
@@ -458,14 +458,14 @@ public class SimulationProcess extends Thread
         Passivated = true;
         started = false;
 
-        SimulationProcess.allProcesses.Insert(this);
+        SimulationProcess.allProcesses.insert(this);
     }
 
-    protected void set_evtime (double time) throws SimulationException
+    protected void setEvtime (double time) throws SimulationException
     {
         if (!idle())
         {
-            if (time >= SimulationProcess.CurrentTime())
+            if (time >= SimulationProcess.currentTime())
                 wakeuptime = time;
             else
                 throw new SimulationException("Time " + time + " invalid.");
@@ -478,23 +478,23 @@ public class SimulationProcess extends Thread
      * Hold the current process for the specified amount of simulation time.
      */
 
-    protected void Hold (double t) throws SimulationException, RestartException
+    protected void hold (double t) throws SimulationException, RestartException
     {
         if ((this == SimulationProcess.Current)
                 || (SimulationProcess.Current == null))
         {
             wakeuptime = SimulationProcess.Never;
-            ActivateDelay(t, false);
-            Suspend();
+            activateDelay(t, false);
+            suspendProcess();
         }
         else
             throw new SimulationException("Hold applied to inactive object.");
     }
 
-    protected void Passivate () throws RestartException
+    protected void passivate () throws RestartException
     {
         if (!Passivated && (this == SimulationProcess.Current))
-            Cancel();
+            cancel();
     }
 
     /**
@@ -502,7 +502,7 @@ public class SimulationProcess extends Thread
      * be called.
      */
 
-    protected void Suspend () throws RestartException
+    protected void suspendProcess () throws RestartException
     {
         try
         {
@@ -540,7 +540,7 @@ public class SimulationProcess extends Thread
      * currently active process will never have Resume called on it.
      */
 
-    protected void Resume ()
+    protected void resumeProcess ()
     {
         /*
          * To compensate for the initial call to Resume by the application.
@@ -549,7 +549,7 @@ public class SimulationProcess extends Thread
         if (SimulationProcess.Current == null)
         {
             SimulationProcess.Current = this;
-            wakeuptime = SimulationProcess.CurrentTime();
+            wakeuptime = SimulationProcess.currentTime();
         }
 
         if (!Terminated)
@@ -580,7 +580,7 @@ public class SimulationProcess extends Thread
             return false;
     }
 
-    void passivate ()
+    void deactivate ()
     {
         Passivated = true;
         wakeuptime = SimulationProcess.Never;

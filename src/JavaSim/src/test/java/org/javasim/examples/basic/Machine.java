@@ -46,17 +46,17 @@ public class Machine extends SimulationProcess
         {
             working = true;
 
-            while (!MachineShop.JobQ.IsEmpty())
+            while (!MachineShop.JobQ.isEmpty())
             {
-                ActiveStart = CurrentTime();
+                ActiveStart = currentTime();
                 MachineShop.CheckFreq++;
 
-                MachineShop.JobsInQueue += MachineShop.JobQ.QueueSize();
-                J = MachineShop.JobQ.Dequeue();
+                MachineShop.JobsInQueue += MachineShop.JobQ.queueSize();
+                J = MachineShop.JobQ.dequeue();
 
                 try
                 {
-                    Hold(ServiceTime());
+                    hold(serviceTime());
                 }
                 catch (SimulationException e)
                 {
@@ -65,7 +65,7 @@ public class Machine extends SimulationProcess
                 {
                 }
 
-                ActiveEnd = CurrentTime();
+                ActiveEnd = currentTime();
                 MachineShop.MachineActiveTime += ActiveEnd - ActiveStart;
                 MachineShop.ProcessedJobs++;
 
@@ -81,7 +81,7 @@ public class Machine extends SimulationProcess
 
             try
             {
-                Cancel();
+                cancel();
             }
             catch (RestartException e)
             {
@@ -89,27 +89,27 @@ public class Machine extends SimulationProcess
         }
     }
 
-    public void Broken ()
+    public void broken ()
     {
         operational = false;
     }
 
-    public void Fixed ()
+    public void fixed ()
     {
         operational = true;
     }
 
-    public boolean IsOperational ()
+    public boolean isOperational ()
     {
         return operational;
     }
 
-    public boolean Processing ()
+    public boolean processing ()
     {
         return working;
     }
 
-    public double ServiceTime ()
+    public double serviceTime ()
     {
         try
         {

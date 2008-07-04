@@ -68,7 +68,7 @@ public class HyperExponentialStream extends RandomStream
         p = 0.5 * (1.0 - Math.sqrt((z - 1.0) / (z + 1.0)));
 
         for (int ss = 0; ss < StreamSelect * 1000; ss++)
-            Uniform();
+            uniform();
     }
 
     /**
@@ -91,7 +91,7 @@ public class HyperExponentialStream extends RandomStream
         p = 0.5 * (1.0 - Math.sqrt((z - 1.0) / (z + 1.0)));
 
         for (int ss = 0; ss < StreamSelect * 1000; ss++)
-            Uniform();
+            uniform();
     }
 
     /**
@@ -102,12 +102,12 @@ public class HyperExponentialStream extends RandomStream
     {
         double z = 0;
 
-        if (Uniform() > p)
+        if (uniform() > p)
             z = Mean / (1.0 - p);
         else
             z = Mean / p;
 
-        return -0.5 * z * Math.log(Uniform());
+        return -0.5 * z * Math.log(uniform());
     }
 
     private double Mean;

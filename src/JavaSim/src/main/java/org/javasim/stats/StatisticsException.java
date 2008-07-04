@@ -20,8 +20,6 @@
 
 package org.javasim.stats;
 
-import java.lang.Exception;
-
 /**
  * General exception thrown by the statistics gathering classes.
  */
@@ -29,6 +27,8 @@ import java.lang.Exception;
 public class StatisticsException extends Exception
 {
 
+    public static final long serialVersionUID = 0xdeadbeef;
+    
     public StatisticsException()
     {
         super();

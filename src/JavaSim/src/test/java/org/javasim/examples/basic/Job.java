@@ -32,18 +32,18 @@ public class Job
         boolean empty = false;
 
         ResponseTime = 0.0;
-        ArrivalTime = Scheduler.CurrentTime();
+        ArrivalTime = Scheduler.currentTime();
 
-        empty = MachineShop.JobQ.IsEmpty();
-        MachineShop.JobQ.Enqueue(this);
+        empty = MachineShop.JobQ.isEmpty();
+        MachineShop.JobQ.enqueue(this);
         MachineShop.TotalJobs++;
 
-        if (empty && !MachineShop.M.Processing()
-                && MachineShop.M.IsOperational())
+        if (empty && !MachineShop.M.processing()
+                && MachineShop.M.isOperational())
         {
             try
             {
-                MachineShop.M.Activate();
+                MachineShop.M.activate();
             }
             catch (SimulationException e)
             {
@@ -56,7 +56,7 @@ public class Job
 
     public void finished ()
     {
-        ResponseTime = Scheduler.CurrentTime() - ArrivalTime;
+        ResponseTime = Scheduler.currentTime() - ArrivalTime;
         MachineShop.TotalResponseTime += ResponseTime;
     }
 

@@ -41,9 +41,9 @@ public class Signaller extends SimulationEntity
         {
             try
             {
-                Hold(sTime.getNumber());
+                hold(sTime.getNumber());
                 Job j = new Job(true);
-                Interrupt(MachineShop.cpu, false);
+                interrupt(MachineShop.cpu, false);
             }
             catch (SimulationException e)
             {

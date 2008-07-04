@@ -24,73 +24,75 @@ import java.io.IOException;
 import java.lang.ArithmeticException;
 
 /**
-  Returns a  number drawn from a uniform distribution with the given lower
-  and upper bounds.
-  */
+ * Returns a number drawn from a uniform distribution with the given lower and
+ * upper bounds.
+ */
 
 public class UniformStream extends RandomStream
 {
 
     /**
-      Create stream with low bound 'l' and high bound 'h'.
-      */
-    
-public UniformStream (double l, double h) 
+     * Create stream with low bound 'l' and high bound 'h'.
+     */
+
+    public UniformStream(double l, double h)
     {
-	super();
-	
-	lo = l;
-	hi = h;
-	range = hi-lo;
+        super();
+
+        lo = l;
+        hi = h;
+        range = hi - lo;
     }
 
     /**
-      Create stream with low bound 'l' and high bound 'h'. Skip the first
-      'StreamSelect' values before returning numbers from the stream.
-      */
-    
-public UniformStream (double l, double h, int StreamSelect)
+     * Create stream with low bound 'l' and high bound 'h'. Skip the first
+     * 'StreamSelect' values before returning numbers from the stream.
+     */
+
+    public UniformStream(double l, double h, int StreamSelect)
     {
-	super();
+        super();
 
-	lo = l;
-	hi = h;
-	range = hi-lo;
+        lo = l;
+        hi = h;
+        range = hi - lo;
 
-	for (int i = 0; i < StreamSelect*1000; i++)
-	    Uniform();
+        for (int i = 0; i < StreamSelect * 1000; i++)
+            uniform();
     }
 
     /**
-      Create stream with low bound 'l' and high bound 'h'. Skip the first
-      'StreamSelect' values before returning numbers from the stream. Pass
-      the seeds 'MGSeed' and 'LCGSeed' to the base class.
-      */
-    
-public UniformStream (double l, double h, int StreamSelect,
-		      long MGSeed, long LCGSeed)
+     * Create stream with low bound 'l' and high bound 'h'. Skip the first
+     * 'StreamSelect' values before returning numbers from the stream. Pass the
+     * seeds 'MGSeed' and 'LCGSeed' to the base class.
+     */
+
+    public UniformStream(double l, double h, int StreamSelect, long MGSeed,
+            long LCGSeed)
     {
-	super(MGSeed, LCGSeed);
+        super(MGSeed, LCGSeed);
 
-	lo = l;
-	hi = h;
-	range = hi-lo;
+        lo = l;
+        hi = h;
+        range = hi - lo;
 
-	for (int i = 0; i < StreamSelect*1000; i++)
-	    Uniform();
+        for (int i = 0; i < StreamSelect * 1000; i++)
+            uniform();
     }
 
     /**
-      Return a number from the stream.
-      */
-    
-public double getNumber () throws IOException, ArithmeticException
+     * Return a number from the stream.
+     */
+
+    public double getNumber () throws IOException, ArithmeticException
     {
-	return lo+(range*Uniform());
+        return lo + (range * uniform());
     }
 
-private double lo;
-private double hi;
-private double range;
-    
+    private double lo;
+
+    private double hi;
+
+    private double range;
+
 };

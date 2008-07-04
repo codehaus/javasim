@@ -20,9 +20,17 @@
 
 package org.javasim;
 
+/**
+ * Classic semaphores can "accumulate" more resources than the starting
+ * value. The ceiling parameter is used to indicate whether or not the
+ * resource count should ever go beyond the initial value - the default
+ * is that it should.
+ */
+
 public class Semaphore
 {
-
+    enum Outcome { DONE, NOTDONE, WOULD_BLOCK };
+    
     /**
      * Create a new mutex (resources = 1).
      */
@@ -36,6 +44,8 @@ public class Semaphore
 
     /**
      * Create a new semaphore (resources = number).
+     * 
+     * @param number the number of resources.
      */
 
     public Semaphore(long number)
@@ -54,9 +64,11 @@ public class Semaphore
 
     /**
      * Number of entities blocked on the semaphore.
+     * 
+     * @return the number of entities blocked.
      */
 
-    public synchronized long NumberWaiting ()
+    public synchronized long numberWaiting ()
     {
         return numberWaiting;
     }
@@ -64,9 +76,13 @@ public class Semaphore
     /**
      * Try to acquire the semaphore. Caller will be blocked if there are no free
      * resources.
+     * 
+     * @param toWait the entity that will be blocked.
+     * @return an indication of the outcome.
+     * @throws RestartException if a reset occurs while an entity is blocked.
      */
 
-    public synchronized int Get (SimulationEntity toWait)
+    public synchronized Outcome get (SimulationEntity toWait)
             throws RestartException
     {
         if (currentResources > 0)
@@ -83,31 +99,36 @@ public class Semaphore
             {
             }
 
-            toWait.Cancel();
+            toWait.cancel();
         }
 
-        return SemaphoreOutcome.DONE;
+        return Outcome.DONE;
     }
 
     /**
      * Only acquire the semaphore if it would not block the caller.
+     * 
+     * @param toWait the entity to block.
+     * @return the outcome
      */
 
-    public synchronized int TryGet (SimulationEntity toWait)
+    public synchronized Outcome tryGet (SimulationEntity toWait)
             throws RestartException
     {
         if (currentResources == 0)
-            return SemaphoreOutcome.WOULD_BLOCK;
+            return Outcome.WOULD_BLOCK;
         else
-            return Get(toWait);
+            return get(toWait);
     }
 
     /**
      * Release the semaphore. No check is made to ensure the caller has
      * previously acquired the semaphore.
+     * 
+     * @return the outcome
      */
 
-    public synchronized int Release ()
+    public synchronized Outcome release ()
     {
         if (numberWaiting > 0)
         {
@@ -122,10 +143,10 @@ public class Semaphore
 
             waitingList.triggerFirst(false);
 
-            return SemaphoreOutcome.DONE;
+            return Outcome.DONE;
         }
         else
-            return SemaphoreOutcome.NOTDONE;
+            return Outcome.NOTDONE;
     }
 
     private TriggerQueue waitingList;

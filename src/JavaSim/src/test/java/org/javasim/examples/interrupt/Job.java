@@ -26,9 +26,9 @@ public class Job
     public Job(boolean isSignal)
     {
         if (isSignal)
-            MachineShop.SignalQ.Enqueue(this);
+            MachineShop.SignalQ.enqueue(this);
         else
-            MachineShop.JobQ.Enqueue(this);
+            MachineShop.JobQ.enqueue(this);
     }
 
 };

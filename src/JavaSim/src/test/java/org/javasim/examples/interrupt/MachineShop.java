@@ -42,13 +42,13 @@ public class MachineShop extends SimulationEntity
             MachineShop.cpu = new Processor(10);
             Job J = new Job(false);
 
-            MachineShop.cpu.Activate();
-            A.Activate();
-            s.Activate();
+            MachineShop.cpu.activate();
+            A.activate();
+            s.activate();
 
             Scheduler.startSimulation();
 
-            WaitFor(cpu);
+            waitFor(cpu);
 
             System.out.println("Total jobs processed " + ProcessedJobs);
             System.out.println("Total signals processed " + SignalledJobs);
@@ -72,9 +72,9 @@ public class MachineShop extends SimulationEntity
         }
     }
 
-    public void Await ()
+    public void await ()
     {
-        this.Resume();
+        this.resumeProcess();
         SimulationProcess.mainSuspend();
     }
 

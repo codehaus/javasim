@@ -68,7 +68,7 @@ public class PrecisionHistogram extends Variance
 
         for (Bucket ptr = Head; ptr != null; trail = ptr, ptr = ptr.cdr())
         {
-            if (ptr.Name() == value)
+            if (ptr.name() == value)
             {
                 ptr.incrementSize(1);
                 return;
@@ -142,7 +142,7 @@ public class PrecisionHistogram extends Variance
     {
         for (Bucket ptr = Head; ptr != null; ptr = ptr.cdr())
         {
-            if (ptr.Name() == name)
+            if (ptr.name() == name)
                 return ptr.size();
 
             if (ptr.greaterThan(name)) // bucket is not present
@@ -179,7 +179,7 @@ public class PrecisionHistogram extends Variance
 
         for (Bucket ptr = Head; ptr != null; ptr = ptr.cdr())
         {
-            oFile.writeDouble(ptr.Name());
+            oFile.writeDouble(ptr.name());
             oFile.writeLong(ptr.size());
         }
 
@@ -244,7 +244,7 @@ public class PrecisionHistogram extends Variance
             System.out.println("Empty histogram.");
         else
             for (Bucket ptr = Head; ptr != null; ptr = ptr.cdr())
-                System.out.println("Bucket : < " + ptr.Name() + ", "
+                System.out.println("Bucket : < " + ptr.name() + ", "
                         + ptr.size() + " >");
 
         super.print();
@@ -270,7 +270,7 @@ public class PrecisionHistogram extends Variance
 
         for (Bucket ptr = Head; ptr != null; trail = ptr, ptr = ptr.cdr())
         {
-            if (ptr.Name() == value)
+            if (ptr.name() == value)
                 return;
             else if (ptr.greaterThan(value)) // bucket is not present
                 break;

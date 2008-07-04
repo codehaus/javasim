@@ -66,7 +66,7 @@ public class TimeVariance extends Variance
         else
         {
             first = false;
-            startTime = SimulationProcess.CurrentTime();
+            startTime = SimulationProcess.currentTime();
         }
 
         store(value);
@@ -78,10 +78,10 @@ public class TimeVariance extends Variance
 
     public double timeAverage ()
     {
-        if (first || (SimulationProcess.CurrentTime() - startTime) == 0)
+        if (first || (SimulationProcess.currentTime() - startTime) == 0)
             return 0.0;
 
-        return ((total + area()) / (SimulationProcess.CurrentTime() - startTime));
+        return ((total + area()) / (SimulationProcess.currentTime() - startTime));
     }
 
     /**
@@ -149,13 +149,13 @@ public class TimeVariance extends Variance
 
     private double area ()
     {
-        return (currentValue * (SimulationProcess.CurrentTime() - stime));
+        return (currentValue * (SimulationProcess.currentTime() - stime));
     }
 
     private void store (double value)
     {
         currentValue = value;
-        stime = SimulationProcess.CurrentTime();
+        stime = SimulationProcess.currentTime();
     }
 
     private boolean first;

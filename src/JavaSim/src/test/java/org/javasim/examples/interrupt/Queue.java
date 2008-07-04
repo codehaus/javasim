@@ -31,7 +31,7 @@ public class Queue
         length = 0;
     }
 
-    public boolean IsEmpty ()
+    public boolean isEmpty ()
     {
         if (length == 0)
             return true;
@@ -39,14 +39,14 @@ public class Queue
             return false;
     }
 
-    public long QueueSize ()
+    public long queueSize ()
     {
         return length;
     }
 
-    public Job Dequeue () throws NoSuchElementException
+    public Job dequeue () throws NoSuchElementException
     {
-        if (IsEmpty())
+        if (isEmpty())
             throw (new NoSuchElementException());
 
         List ptr = head;
@@ -57,14 +57,14 @@ public class Queue
         return ptr.work;
     }
 
-    public void Enqueue (Job toadd)
+    public void enqueue (Job toadd)
     {
         if (toadd == null)
             return;
 
         List ptr = head;
 
-        if (IsEmpty())
+        if (isEmpty())
         {
             head = new List();
             ptr = head;

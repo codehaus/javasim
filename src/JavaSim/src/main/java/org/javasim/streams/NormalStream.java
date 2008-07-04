@@ -25,100 +25,103 @@ import java.io.IOException;
 import java.lang.ArithmeticException;
 
 /**
-  Returns a number from a normal distribution with the given mean and
-  standard deviation.
-  */
+ * Returns a number from a normal distribution with the given mean and standard
+ * deviation.
+ */
 
 public class NormalStream extends RandomStream
 {
 
     /**
-      Create stream with mean 'm' and standard deviation 'sd'.
-      */
-    
-public NormalStream (double m, double sd)
+     * Create stream with mean 'm' and standard deviation 'sd'.
+     */
+
+    public NormalStream(double m, double sd)
     {
-	super();
-	
-	Mean  = m;
-	StandardDeviation = sd;
-	z = 0.0;
+        super();
+
+        Mean = m;
+        StandardDeviation = sd;
+        z = 0.0;
     }
 
     /**
-      Create stream with mean 'm' and standard deviation 'sd'. Skip the first
-      'StreamSelect' values.
-      */
-    
-public NormalStream (double m, double sd, int StreamSelect)
+     * Create stream with mean 'm' and standard deviation 'sd'. Skip the first
+     * 'StreamSelect' values.
+     */
+
+    public NormalStream(double m, double sd, int StreamSelect)
     {
-	super();
+        super();
 
-	Mean  = m;
-	StandardDeviation = sd;
-	z = 0.0;
+        Mean = m;
+        StandardDeviation = sd;
+        z = 0.0;
 
-	for (int ss = 0; ss < StreamSelect*1000; ss++)
-	    Uniform();
+        for (int ss = 0; ss < StreamSelect * 1000; ss++)
+            uniform();
     }
 
     /**
-      Create stream with mean 'm' and standard deviation 'sd'. Skip the first
-      'StreamSelect' values. Pass seeds 'MGSeed' and 'LCGSeed' to the base
-      class.
-      */
-    
-public NormalStream (double m, double sd, int StreamSelect,
-		     long MGSeed, long LCGSeed)
+     * Create stream with mean 'm' and standard deviation 'sd'. Skip the first
+     * 'StreamSelect' values. Pass seeds 'MGSeed' and 'LCGSeed' to the base
+     * class.
+     */
+
+    public NormalStream(double m, double sd, int StreamSelect, long MGSeed,
+            long LCGSeed)
     {
-	super(MGSeed, LCGSeed);
+        super(MGSeed, LCGSeed);
 
-	Mean = m;
-	StandardDeviation = sd;
-	z = 0.0;
+        Mean = m;
+        StandardDeviation = sd;
+        z = 0.0;
 
-	for (int ss = 0; ss < StreamSelect*1000; ss++)
-	    Uniform();	
+        for (int ss = 0; ss < StreamSelect * 1000; ss++)
+            uniform();
     }
 
     /**
-      Return a stream number. Use the polar method, due to Box, Muller and
-      Marsaglia.Taken from Seminumerical Algorithms, Knuth,
-      Addison-Wesley, p.117.
-      */
-    
-public double getNumber () throws IOException, ArithmeticException
+     * Return a stream number. Use the polar method, due to Box, Muller and
+     * Marsaglia.Taken from Seminumerical Algorithms, Knuth, Addison-Wesley,
+     * p.117.
+     */
+
+    public double getNumber () throws IOException, ArithmeticException
     {
-	// Use the polar method, due to Box, Muller and Marsaglia
-	// Taken from Seminumerical Algorithms, Knuth, Addison-Wesley, p.117
+        // Use the polar method, due to Box, Muller and Marsaglia
+        // Taken from Seminumerical Algorithms, Knuth, Addison-Wesley, p.117
 
-	double X2;
+        double X2;
 
-	if (z != 0.0)
-	{
-	    X2 = z;
-	    z = 0.0;
-	}
-	else
-	{
-	    double S, v1, v2;
-	    do
-	    {
-		v1 = 2.0*Uniform()-1.0;
-		v2 = 2.0*Uniform()-1.0;
-		S = v1*v1 + v2*v2;
-	    } while (S>=1.0);
+        if (z != 0.0)
+        {
+            X2 = z;
+            z = 0.0;
+        }
+        else
+        {
+            double S, v1, v2;
+            do
+            {
+                v1 = 2.0 * uniform() - 1.0;
+                v2 = 2.0 * uniform() - 1.0;
+                S = v1 * v1 + v2 * v2;
+            }
+            while (S >= 1.0);
 
-	    S = Math.sqrt((-2.0*Math.log(S))/S);
-	    X2 = v1*S;
-	    z  = v2*S;
-	}
+            S = Math.sqrt((-2.0 * Math.log(S)) / S);
+            X2 = v1 * S;
+            z = v2 * S;
+        }
 
-	return Mean + X2*StandardDeviation;	
+        return Mean + X2 * StandardDeviation;
     }
-    
-private double Mean;
-private double StandardDeviation;
-private double z;
-    
+
+    private double Mean;
+
+    private double StandardDeviation;
+
+    private double z;
+
 };

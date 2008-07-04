@@ -241,12 +241,12 @@ public class Histogram extends PrecisionHistogram
         {
         case ACCUMULATE:
         case MAX:
-            return b.Name();
+            return b.name();
         case MEAN:
-            return ((a.Name() * a.size() + b.Name() * b.size()) / (a.size() + b
+            return ((a.name() * a.size() + b.name() * b.size()) / (a.size() + b
                     .size()));
         case MIN:
-            return a.Name();
+            return a.name();
         default:
             break;
         }
@@ -272,7 +272,7 @@ public class Histogram extends PrecisionHistogram
 
         // shouldn't get here!
 
-        throw (new StatisticsException("compositeSize switch error."));
+        throw new StatisticsException("compositeSize switch error.");
     }
 
     public static final int ACCUMULATE = 0;

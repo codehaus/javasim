@@ -105,11 +105,11 @@ public class SimpleHistogram extends PrecisionHistogram
 
         for (Bucket ptr = Head; ptr != null; ptr = ptr.cdr())
         {
-            double bucketValue = ptr.Name();
+            double bucketValue = ptr.name();
 
             if ((value == bucketValue) || (value <= bucketValue + width))
             {
-                super.setValue(ptr.Name());
+                super.setValue(ptr.name());
                 return;
             }
         }
@@ -147,7 +147,7 @@ public class SimpleHistogram extends PrecisionHistogram
 
         for (Bucket ptr = Head; ptr != null; ptr = ptr.cdr())
         {
-            double bucketValue = ptr.Name();
+            double bucketValue = ptr.name();
 
             if ((name == bucketValue) || (name <= bucketValue + width))
                 return ptr.size();

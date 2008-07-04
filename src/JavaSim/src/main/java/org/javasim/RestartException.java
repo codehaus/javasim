@@ -20,9 +20,18 @@
 
 package org.javasim;
 
+/**
+ * This exception is thrown if the simulation is restarted. Simulation entities
+ * are expected to catch this and do any tidy up necessary, prior to the restart
+ * of the simulation later.
+ * 
+ * @author marklittle
+ *
+ */
 public class RestartException extends Exception
 {
-
+    public static final long serialVersionUID = 0xdeadbeef;
+    
     public RestartException()
     {
         super();

@@ -53,7 +53,7 @@ public class ExponentialStream extends RandomStream
         Mean = m;
 
         for (int i = 0; i < StreamSelect * 1000; i++)
-            Uniform();
+            uniform();
     }
 
     /**
@@ -69,7 +69,7 @@ public class ExponentialStream extends RandomStream
         Mean = m;
 
         for (int i = 0; i < StreamSelect * 1000; i++)
-            Uniform();
+            uniform();
     }
 
     /**
@@ -78,7 +78,7 @@ public class ExponentialStream extends RandomStream
 
     public double getNumber () throws IOException, ArithmeticException
     {
-        return -Mean * Math.log(Uniform());
+        return -Mean * Math.log(uniform());
     }
 
     private double Mean;

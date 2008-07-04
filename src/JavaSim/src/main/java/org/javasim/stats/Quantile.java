@@ -70,7 +70,7 @@ public class Quantile extends PrecisionHistogram
             ptr = ptr.cdr();
         }
 
-        return trail.Name();
+        return trail.name();
     }
 
     /**
