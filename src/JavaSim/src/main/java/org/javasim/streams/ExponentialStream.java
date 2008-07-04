@@ -18,69 +18,69 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Distributions;
+package org.javasim.streams;
 
 import java.lang.Math;
 import java.io.IOException;
 import java.lang.ArithmeticException;
 
 /**
-  Returns a number from an exponential distribution with the given mean.
-  */
+ * Returns a number from an exponential distribution with the given mean.
+ */
 
 public class ExponentialStream extends RandomStream
 {
 
     /**
-      Create stream with mean 'm'.
-      */
-    
-public ExponentialStream (double m)
-    {
-	super();
+     * Create stream with mean 'm'.
+     */
 
-	Mean = m;
+    public ExponentialStream(double m)
+    {
+        super();
+
+        Mean = m;
     }
 
     /**
-      Create stream with mean 'm'. Skip the first 'StreamSelect' stream values.
-      */
-    
-public ExponentialStream (double m, int StreamSelect)
+     * Create stream with mean 'm'. Skip the first 'StreamSelect' stream values.
+     */
+
+    public ExponentialStream(double m, int StreamSelect)
     {
-	super();
+        super();
 
-	Mean = m;
+        Mean = m;
 
-	for (int i = 0; i < StreamSelect*1000; i++)
-	    Uniform();
-    }
-    
-    /**
-      Create stream with mean 'm'. Skip the first 'StreamSelect' stream values.
-      Pass seeds 'MGSeed' and 'LCGSeed' to the base class.
-      */
-    
-public ExponentialStream (double m, int StreamSelect,
-			  long MGSeed, long LCGSeed)
-    {
-	super(MGSeed, LCGSeed);
-
-	Mean = m;
-
-	for (int i = 0; i < StreamSelect*1000; i++)
-	    Uniform();
+        for (int i = 0; i < StreamSelect * 1000; i++)
+            Uniform();
     }
 
     /**
-      Return stream number.
-      */
-    
-public double getNumber () throws IOException, ArithmeticException
+     * Create stream with mean 'm'. Skip the first 'StreamSelect' stream values.
+     * Pass seeds 'MGSeed' and 'LCGSeed' to the base class.
+     */
+
+    public ExponentialStream(double m, int StreamSelect, long MGSeed,
+            long LCGSeed)
     {
-	return -Mean*Math.log(Uniform());
+        super(MGSeed, LCGSeed);
+
+        Mean = m;
+
+        for (int i = 0; i < StreamSelect * 1000; i++)
+            Uniform();
     }
 
-private double Mean;
-    
+    /**
+     * Return stream number.
+     */
+
+    public double getNumber () throws IOException, ArithmeticException
+    {
+        return -Mean * Math.log(Uniform());
+    }
+
+    private double Mean;
+
 };

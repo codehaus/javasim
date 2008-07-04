@@ -18,7 +18,7 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Distributions;
+package org.javasim.streams;
 
 import java.lang.Math;
 import java.io.IOException;

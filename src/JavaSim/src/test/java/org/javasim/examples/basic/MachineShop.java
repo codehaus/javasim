@@ -18,83 +18,99 @@
  * (C) 1990-2008,
  */
 
-import java.lang.*;
-import arjuna.JavaSim.Simulation.*;
+package org.javasim.examples.basic;
 
-import arjuna.JavaSim.Simulation.SimulationException;
+import org.javasim.RestartException;
+import org.javasim.Scheduler;
+import org.javasim.SimulationException;
+import org.javasim.SimulationProcess;
 
 public class MachineShop extends SimulationProcess
 {
-    
-public MachineShop (boolean isBreaks)
+
+    public MachineShop(boolean isBreaks)
     {
-	useBreaks = isBreaks;
-    }
-    
-public void run ()
-    {
-	try
-	{
-	    Breaks B = null;
-	    Arrivals A = new Arrivals(8);
-	    MachineShop.M = new Machine(8);
-	    Job J = new Job();
-	    
-	    A.Activate();
-	    
-	    if (useBreaks)
-	    {
-		B = new Breaks();
-		B.Activate();
-	    }
-
-	    Scheduler.startSimulation();
-
-	    while (MachineShop.ProcessedJobs < 1000)
-		Hold(1000);
-
-	    System.out.println("Total number of jobs present "+TotalJobs);
-	    System.out.println("Total number of jobs processed "+ProcessedJobs);
-	    System.out.println("Total response time of "+TotalResponseTime);
-	    System.out.println("Average response time = "+(TotalResponseTime / ProcessedJobs));
-	    System.out.println("Probability that machine is working = "+((MachineActiveTime - MachineFailedTime) / CurrentTime()));
-	    System.out.println("Probability that machine has failed = "+(MachineFailedTime / MachineActiveTime));
-	    System.out.println("Average number of jobs present = "+(JobsInQueue / CheckFreq));
-    
-	    Scheduler.stopSimulation();
-
-	    A.terminate();
-	    MachineShop.M.terminate();
-    
-	    if (useBreaks)
-		B.terminate();
-
-	    SimulationProcess.mainResume();
-	}
-	catch (SimulationException e)
-	{
-	}
-	catch (RestartException e)
-	{
-	}
+        useBreaks = isBreaks;
     }
 
-public void Await ()
+    public void run ()
     {
-	this.Resume();
-	SimulationProcess.mainSuspend();
+        try
+        {
+            Breaks B = null;
+            Arrivals A = new Arrivals(8);
+            MachineShop.M = new Machine(8);
+            Job J = new Job();
+
+            A.Activate();
+
+            if (useBreaks)
+            {
+                B = new Breaks();
+                B.Activate();
+            }
+
+            Scheduler.startSimulation();
+
+            while (MachineShop.ProcessedJobs < 1000)
+                Hold(1000);
+
+            System.out.println("Total number of jobs present " + TotalJobs);
+            System.out.println("Total number of jobs processed "
+                    + ProcessedJobs);
+            System.out.println("Total response time of " + TotalResponseTime);
+            System.out.println("Average response time = "
+                    + (TotalResponseTime / ProcessedJobs));
+            System.out
+                    .println("Probability that machine is working = "
+                            + ((MachineActiveTime - MachineFailedTime) / CurrentTime()));
+            System.out.println("Probability that machine has failed = "
+                    + (MachineFailedTime / MachineActiveTime));
+            System.out.println("Average number of jobs present = "
+                    + (JobsInQueue / CheckFreq));
+
+            Scheduler.stopSimulation();
+
+            A.terminate();
+            MachineShop.M.terminate();
+
+            if (useBreaks)
+                B.terminate();
+
+            SimulationProcess.mainResume();
+        }
+        catch (SimulationException e)
+        {
+        }
+        catch (RestartException e)
+        {
+        }
     }
 
-public static Machine M = null;
-public static Queue JobQ = new Queue();
-public static double TotalResponseTime = 0.0;
-public static long TotalJobs = 0;
-public static long ProcessedJobs = 0;
-public static long JobsInQueue = 0;
-public static long CheckFreq = 0;
-public static double MachineActiveTime = 0.0;
-public static double MachineFailedTime = 0.0;
-    
-private boolean useBreaks;
-    
+    public void Await ()
+    {
+        this.Resume();
+        SimulationProcess.mainSuspend();
+    }
+
+    public static Machine M = null;
+
+    public static Queue JobQ = new Queue();
+
+    public static double TotalResponseTime = 0.0;
+
+    public static long TotalJobs = 0;
+
+    public static long ProcessedJobs = 0;
+
+    public static long JobsInQueue = 0;
+
+    public static long CheckFreq = 0;
+
+    public static double MachineActiveTime = 0.0;
+
+    public static double MachineFailedTime = 0.0;
+
+    private boolean useBreaks;
+
 };

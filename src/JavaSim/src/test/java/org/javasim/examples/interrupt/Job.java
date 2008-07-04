@@ -18,17 +18,17 @@
  * (C) 1990-2008,
  */
 
-import arjuna.JavaSim.Simulation.*;
+package org.javasim.examples.interrupt;
 
 public class Job
 {
 
-public Job (boolean isSignal)
+    public Job(boolean isSignal)
     {
-	if (isSignal)
-	    MachineShop.SignalQ.Enqueue(this);
-	else
-	    MachineShop.JobQ.Enqueue(this);
+        if (isSignal)
+            MachineShop.SignalQ.Enqueue(this);
+        else
+            MachineShop.JobQ.Enqueue(this);
     }
 
 };

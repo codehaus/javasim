@@ -18,19 +18,18 @@
  * (C) 1990-2008,
  */
 
-import java.lang.*;
-import arjuna.JavaSim.Simulation.*;
+package org.javasim.examples.interrupt;
 
 public class Main
 {
 
-public static void main (String[] args)
+    public static void main (String[] args)
     {
-	MachineShop m = new MachineShop();
-	
-	m.Await();
+        MachineShop m = new MachineShop();
 
-	System.exit(0);
+        m.Await();
+
+        System.exit(0);
     }
-    
+
 }

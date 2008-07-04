@@ -18,151 +18,154 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Statistics;
+package org.javasim.stats;
 
 import java.io.*;
-import arjuna.JavaSim.Simulation.*;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.IllegalArgumentException;
 
+import org.javasim.SimulationProcess;
+
 /**
-  Obtain the average value given during the simulation time.
-  */
+ * Obtain the average value given during the simulation time.
+ */
 
 public class TimeVariance extends Variance
 {
-    
-public TimeVariance ()
+
+    public TimeVariance()
     {
-	reset();
+        reset();
     }
 
     /**
-      Zero the statistics.
-      */
-    
-public void reset ()
+     * Zero the statistics.
+     */
+
+    public void reset ()
     {
-	first = true;
-	startTime = currentValue = 0.0;
-	stime = total = 0.0;
-	super.reset();
+        first = true;
+        startTime = currentValue = 0.0;
+        stime = total = 0.0;
+        super.reset();
     }
 
     /**
-      Add 'value', updating the statistics.
-      */
-    
-public void setValue (double value) throws IllegalArgumentException
+     * Add 'value', updating the statistics.
+     */
+
+    public void setValue (double value) throws IllegalArgumentException
     {
-	super.setValue(value);
+        super.setValue(value);
 
-	if (!first)
-	{
-	    total += area();
-	    if (value == currentValue)
-		return;
-	}
-	else
-	{
-	    first = false;
-	    startTime = SimulationProcess.CurrentTime();
-	}
+        if (!first)
+        {
+            total += area();
+            if (value == currentValue)
+                return;
+        }
+        else
+        {
+            first = false;
+            startTime = SimulationProcess.CurrentTime();
+        }
 
-	store(value);
+        store(value);
     }
 
     /**
-      Return the average value given up to the current simulation time.
-      */
-    
-public double timeAverage ()
-    {
-	if (first || (SimulationProcess.CurrentTime() - startTime) == 0)
-	    return 0.0;
+     * Return the average value given up to the current simulation time.
+     */
 
-	return ((total + area())/(SimulationProcess.CurrentTime() - startTime));
+    public double timeAverage ()
+    {
+        if (first || (SimulationProcess.CurrentTime() - startTime) == 0)
+            return 0.0;
+
+        return ((total + area()) / (SimulationProcess.CurrentTime() - startTime));
     }
 
     /**
-      Save the state of the histogram to the file named 'fileName'.
-      */
-    
-public boolean saveState (String fileName) throws IOException
+     * Save the state of the histogram to the file named 'fileName'.
+     */
+
+    public boolean saveState (String fileName) throws IOException
     {
-	FileOutputStream f = new FileOutputStream(fileName);
-	DataOutputStream oFile = new DataOutputStream(f);
+        FileOutputStream f = new FileOutputStream(fileName);
+        DataOutputStream oFile = new DataOutputStream(f);
 
-	boolean res = saveState(oFile);
+        boolean res = saveState(oFile);
 
-	f.close();
+        f.close();
 
-	return res;
+        return res;
     }
 
     /**
-      Save the state of the histogram to the stream 'oFile'.
-      */
-    
-public boolean saveState (DataOutputStream oFile) throws IOException
+     * Save the state of the histogram to the stream 'oFile'.
+     */
+
+    public boolean saveState (DataOutputStream oFile) throws IOException
     {
-	oFile.writeBoolean(first);
-	oFile.writeDouble(startTime);
-	oFile.writeDouble(currentValue);
-	oFile.writeDouble(stime);
-	oFile.writeDouble(total);
-    
-	return super.saveState(oFile);
+        oFile.writeBoolean(first);
+        oFile.writeDouble(startTime);
+        oFile.writeDouble(currentValue);
+        oFile.writeDouble(stime);
+        oFile.writeDouble(total);
+
+        return super.saveState(oFile);
     }
 
     /**
-      Restore the histogram state from the file 'fileName'.
-      */
-    
-public boolean restoreState (String fileName) throws FileNotFoundException, IOException
+     * Restore the histogram state from the file 'fileName'.
+     */
+
+    public boolean restoreState (String fileName) throws FileNotFoundException,
+            IOException
     {
-	FileInputStream f = new FileInputStream(fileName);
-	DataInputStream iFile = new DataInputStream(f);
+        FileInputStream f = new FileInputStream(fileName);
+        DataInputStream iFile = new DataInputStream(f);
 
-	boolean res = restoreState(iFile);
+        boolean res = restoreState(iFile);
 
-	f.close();
+        f.close();
 
-	return res;	
+        return res;
     }
 
     /**
-      Restore the histogram state from the stream 'iFile'.
-      */
-    
-public boolean restoreState (DataInputStream iFile) throws IOException
-    {
-	first = iFile.readBoolean();
-	startTime = iFile.readDouble();
-	currentValue = iFile.readDouble();
-	stime = iFile.readDouble();
-	total = iFile.readDouble();
+     * Restore the histogram state from the stream 'iFile'.
+     */
 
-	return true;
-    }
-    
-private double area ()
+    public boolean restoreState (DataInputStream iFile) throws IOException
     {
-	return (currentValue * (SimulationProcess.CurrentTime() - stime));
-    }
-    
-private void store (double value)
-    {
-	currentValue = value;
-	stime = SimulationProcess.CurrentTime();
+        first = iFile.readBoolean();
+        startTime = iFile.readDouble();
+        currentValue = iFile.readDouble();
+        stime = iFile.readDouble();
+        total = iFile.readDouble();
+
+        return true;
     }
 
-private boolean first;
-private double startTime;
-private double currentValue;
-private double stime;
-private double total;
+    private double area ()
+    {
+        return (currentValue * (SimulationProcess.CurrentTime() - stime));
+    }
+
+    private void store (double value)
+    {
+        currentValue = value;
+        stime = SimulationProcess.CurrentTime();
+    }
+
+    private boolean first;
+
+    private double startTime;
+
+    private double currentValue;
+
+    private double stime;
+
+    private double total;
 
 };

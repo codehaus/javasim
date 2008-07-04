@@ -18,19 +18,19 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Simulation;
+package org.javasim;
 
 public class SimulationException extends Exception
 {
 
-public SimulationException ()
+    public SimulationException()
     {
-	super();
+        super();
     }
 
-public SimulationException (String s)
+    public SimulationException(String s)
     {
-	super(s);
+        super(s);
     }
 
 };

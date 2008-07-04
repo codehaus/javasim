@@ -18,7 +18,7 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Simulation;
+package org.javasim;
 
 public class SemaphoreOutcome
 {

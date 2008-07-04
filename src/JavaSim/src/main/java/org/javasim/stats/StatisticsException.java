@@ -18,25 +18,25 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Statistics;
+package org.javasim.stats;
 
 import java.lang.Exception;
 
 /**
-  General exception thrown by the statistics gathering classes.
-  */
+ * General exception thrown by the statistics gathering classes.
+ */
 
 public class StatisticsException extends Exception
 {
 
-public StatisticsException ()
+    public StatisticsException()
     {
-	super();
+        super();
     }
 
-public StatisticsException (String s)
+    public StatisticsException(String s)
     {
-	super(s);
+        super(s);
     }
 
 };

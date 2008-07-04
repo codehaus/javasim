@@ -11,18 +11,16 @@
 	<!-- Set internal property defaults -->
 
 	<property name="uk.ac.ncl.arjuna.javasim.installationdirectory"
-	location="C:/temp/javasim"/>
+	location="install"/>
 
 	<!-- Path names -->
 	<property name="uk.ac.ncl.arjuna.javasim.internal.src"
-		  value="classes/arjuna"/>
+		  value="src/main/java"/>
 	<property name="uk.ac.ncl.arjuna.javasim.internal.dest.root" value="build"/>
 	<property
-		  name="uk.ac.ncl.arjuna.javasim.internal.example1.src" value="Examples/Basic"/>
-	<property name="uk.ac.ncl.arjuna.javasim.internal.example2.src" value="Examples/Interrupt"/>
+		  name="uk.ac.ncl.arjuna.javasim.internal.example.src" value="src/test/java"/>
 	<property
-		  name="uk.ac.ncl.arjuna.javasim.internal.example1.dest" value="build/Basic"/>
-	<property name="uk.ac.ncl.arjuna.javasim.internal.example2.dest" value="build/Interrupt"/>
+		  name="uk.ac.ncl.arjuna.javasim.internal.example.dest" value="build/test"/>
 	<property name="uk.ac.ncl.arjuna.javasim.internal.dest" value="build/classes"/>
 	<property name="uk.ac.ncl.arjuna.javasim.internal.jar.dest" value="lib"/>
 	<property name="uk.ac.ncl.arjuna.javasim.internal.javadocs.dest"
@@ -38,8 +36,7 @@
 		<mkdir
 		       dir="${uk.ac.ncl.arjuna.javasim.internal.dest}"/>
 		<mkdir
-		       dir="${uk.ac.ncl.arjuna.javasim.internal.example1.dest}"/>
-		<mkdir dir="${uk.ac.ncl.arjuna.javasim.internal.example2.dest}"/>
+		       dir="${uk.ac.ncl.arjuna.javasim.internal.example.dest}"/>
 	</target>
 
 	<!-- Compilation targets -->
@@ -62,25 +59,14 @@
 
 	<target name="uk.ac.ncl.arjuna.javasim.internal.examples" depends="uk.ac.ncl.arjuna.javasim.internal.compile">
 		<echo message="Compiling examples"/>
-		<javac srcdir="${uk.ac.ncl.arjuna.javasim.internal.example1.src}"
-                       destdir="${uk.ac.ncl.arjuna.javasim.internal.example1.dest}"
+		<javac srcdir="${uk.ac.ncl.arjuna.javasim.internal.example.src}"
+                       destdir="${uk.ac.ncl.arjuna.javasim.internal.example.dest}"
                        excludes="${uk.ac.ncl.arjuna.javasim.internal.compile.excludes}"
                        debug="yes"
 	        >
 			<classpath>
 				<path
-				      path="${uk.ac.ncl.arjuna.javasim.internal.example1.src}"/>
-				<path path="${uk.ac.ncl.arjuna.javasim.internal.jar.dest}/${uk.ac.ncl.arjuna.javasim.internal.modulename}.jar"/>
-			</classpath>
-		</javac>
-		<javac srcdir="${uk.ac.ncl.arjuna.javasim.internal.example2.src}"
-                       destdir="${uk.ac.ncl.arjuna.javasim.internal.example2.dest}"
-                       excludes="${uk.ac.ncl.arjuna.javasim.internal.compile.excludes}"
-                       debug="yes"
-	        >
-			<classpath>
-				<path
-				      path="${uk.ac.ncl.arjuna.javasim.internal.example2.src}"/>
+				      path="${uk.ac.ncl.arjuna.javasim.internal.example.src}"/>
 				<path path="${uk.ac.ncl.arjuna.javasim.internal.jar.dest}/${uk.ac.ncl.arjuna.javasim.internal.modulename}.jar"/>
 			</classpath>
 		</javac>
@@ -88,11 +74,11 @@
 
 	<!-- javadocs paths -->
 	<path id="uk.ac.ncl.arjuna.javasim.javadocs.path">
-		<pathelement path="classes"/>
+		<pathelement path="src/main/java"/>
 	</path>
 
 	<property name="uk.ac.ncl.arjuna.javasim.javadocs.list"
-	value="arjuna.JavaSim.*"/>
+	value="org.javasim.*"/>
 
 	<!-- Jar targets -->
 	<target name="uk.ac.ncl.arjuna.javasim.all"

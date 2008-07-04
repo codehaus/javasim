@@ -18,42 +18,45 @@
  * (C) 1990-2008,
  */
 
-import arjuna.JavaSim.Simulation.*;
-import arjuna.JavaSim.Distributions.*;
+package org.javasim.examples.basic;
 
 import java.io.IOException;
-import arjuna.JavaSim.Simulation.SimulationException;
+
+import org.javasim.RestartException;
+import org.javasim.SimulationException;
+import org.javasim.SimulationProcess;
+import org.javasim.streams.ExponentialStream;
 
 public class Arrivals extends SimulationProcess
 {
-    
-public Arrivals (double mean)
+
+    public Arrivals(double mean)
     {
-	InterArrivalTime = new ExponentialStream(mean);
+        InterArrivalTime = new ExponentialStream(mean);
     }
 
-public void run ()
+    public void run ()
     {
-	for (;;)
-	{
-	    try
-	    {
-		Hold(InterArrivalTime.getNumber());
-	    }
-	    catch (SimulationException e)
-	    {
-	    }
-	    catch (RestartException e)
-	    {
-	    }
-	    catch (IOException e)
-	    {
-	    }
+        for (;;)
+        {
+            try
+            {
+                Hold(InterArrivalTime.getNumber());
+            }
+            catch (SimulationException e)
+            {
+            }
+            catch (RestartException e)
+            {
+            }
+            catch (IOException e)
+            {
+            }
 
-	    Job work = new Job();
-	}
+            Job work = new Job();
+        }
     }
-    
-private ExponentialStream InterArrivalTime;
-    
+
+    private ExponentialStream InterArrivalTime;
+
 };

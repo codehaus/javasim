@@ -18,163 +18,162 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Statistics;
-
-import java.lang.*;
-import java.io.*;
+package org.javasim.stats;
 
 public class Bucket
 {
 
     /**
-      Create bucket with name 'n' and number of entries 'initEntries'.
-      */
-    
-public Bucket (double n, long initEntries)
+     * Create bucket with name 'n' and number of entries 'initEntries'.
+     */
+
+    public Bucket(double n, long initEntries)
     {
-	numberOfEntries = initEntries;
-	name = n;
-	next = null;
+        numberOfEntries = initEntries;
+        name = n;
+        next = null;
     }
 
     /**
-      Create bucket with name 'n' and 1 entry.
-      */
-    
-public Bucket (double n)
+     * Create bucket with name 'n' and 1 entry.
+     */
+
+    public Bucket(double n)
     {
-	numberOfEntries = 1;
-	name = n;
-	next = null;
+        numberOfEntries = 1;
+        name = n;
+        next = null;
     }
 
     /**
-      Copy constructor.
-      */
-    
-public Bucket (Bucket b)
-{
-    numberOfEntries = b.size();
-    name = b.Name();
-    next = null;
-}
+     * Copy constructor.
+     */
 
-    /**
-      Is the name of the bucket equal to 'value'?
-      */
-    
-public boolean equals (double value)
+    public Bucket(Bucket b)
     {
-	if (name == value)
-	    return true;
-	else
-	    return false;
+        numberOfEntries = b.size();
+        name = b.Name();
+        next = null;
     }
 
     /**
-      Is the name of the bucket greater than 'value'?
-      */
-    
-public boolean greaterThan (double value)
+     * Is the name of the bucket equal to 'value'?
+     */
+
+    public boolean equals (double value)
     {
-	if (name > value)
-	    return true;
-	else
-	    return false;
+        if (name == value)
+            return true;
+        else
+            return false;
     }
 
     /**
-      Is the name of the bucket greater than or equal to 'value'?
-      */
-    
-public boolean greaterThanOrEqual (double value)
+     * Is the name of the bucket greater than 'value'?
+     */
+
+    public boolean greaterThan (double value)
     {
-	if (name >= value)
-	    return true;
-	else
-	    return false;
+        if (name > value)
+            return true;
+        else
+            return false;
     }
 
     /**
-      Is the name of the bucket less than 'value'?
-      */
-    
-public boolean lessThan (double value)
+     * Is the name of the bucket greater than or equal to 'value'?
+     */
+
+    public boolean greaterThanOrEqual (double value)
     {
-	if (name < value)
-	    return true;
-	else
-	    return false;
+        if (name >= value)
+            return true;
+        else
+            return false;
     }
 
     /**
-      Is the name of the bucket less than or equal to 'value'?
-      */
-    
-public boolean lessThanOrEqual (double value)
+     * Is the name of the bucket less than 'value'?
+     */
+
+    public boolean lessThan (double value)
     {
-	if (name <= value)
-	    return true;
-	else
-	    return false;
+        if (name < value)
+            return true;
+        else
+            return false;
     }
 
     /**
-      Returns the name of the bucket.
-      */
-    
-public double Name ()
+     * Is the name of the bucket less than or equal to 'value'?
+     */
+
+    public boolean lessThanOrEqual (double value)
     {
-	return name;
+        if (name <= value)
+            return true;
+        else
+            return false;
     }
 
     /**
-      Increment the number of entries by 'value'.
-      */
-    
-public void incrementSize (long value)
+     * Returns the name of the bucket.
+     */
+
+    public double Name ()
     {
-	numberOfEntries += value;
+        return name;
     }
 
     /**
-      Set the number of entries to 'value'.
-      */
-    
-public void size (long value)
+     * Increment the number of entries by 'value'.
+     */
+
+    public void incrementSize (long value)
     {
-	numberOfEntries = value;
+        numberOfEntries += value;
     }
 
     /**
-      Return the number of entries.
-      */
-    
-public long size ()
+     * Set the number of entries to 'value'.
+     */
+
+    public void size (long value)
     {
-	return numberOfEntries;
+        numberOfEntries = value;
     }
 
     /**
-      Return the next bucket.
-      */
-    
-public Bucket cdr ()
+     * Return the number of entries.
+     */
+
+    public long size ()
     {
-	return next;
+        return numberOfEntries;
     }
 
     /**
-      Set the next bucket.
-      */
-    
-public void setCdr (Bucket n)
+     * Return the next bucket.
+     */
+
+    public Bucket cdr ()
     {
-	next = n;
+        return next;
     }
-    
-private long numberOfEntries;
-private double name;
-private Bucket next;
-    
+
+    /**
+     * Set the next bucket.
+     */
+
+    public void setCdr (Bucket n)
+    {
+        next = n;
+    }
+
+    private long numberOfEntries;
+
+    private double name;
+
+    private Bucket next;
+
 };

@@ -18,42 +18,45 @@
  * (C) 1990-2008,
  */
 
-import arjuna.JavaSim.Simulation.*;
-import arjuna.JavaSim.Distributions.*;
+package org.javasim.examples.interrupt;
 
 import java.io.IOException;
-import arjuna.JavaSim.Simulation.SimulationException;
+
+import org.javasim.RestartException;
+import org.javasim.SimulationEntity;
+import org.javasim.SimulationException;
+import org.javasim.streams.ExponentialStream;
 
 public class Signaller extends SimulationEntity
 {
-    
-public Signaller (double mean)
+
+    public Signaller(double mean)
     {
-	sTime = new ExponentialStream(mean);
-    }
-    
-public void run ()
-    {
-	for (;;)
-	{
-	    try
-	    {
-		Hold(sTime.getNumber());
-		Job j = new Job(true);
-		Interrupt(MachineShop.cpu, false);
-	    }
-	    catch (SimulationException e)
-	    {
-	    }
-	    catch (RestartException e)
-	    {
-	    }
-	    catch (IOException e)
-	    {
-	    }
-	}
+        sTime = new ExponentialStream(mean);
     }
 
-private ExponentialStream sTime;
-    
+    public void run ()
+    {
+        for (;;)
+        {
+            try
+            {
+                Hold(sTime.getNumber());
+                Job j = new Job(true);
+                Interrupt(MachineShop.cpu, false);
+            }
+            catch (SimulationException e)
+            {
+            }
+            catch (RestartException e)
+            {
+            }
+            catch (IOException e)
+            {
+            }
+        }
+    }
+
+    private ExponentialStream sTime;
+
 };

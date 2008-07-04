@@ -18,64 +18,65 @@
  * (C) 1990-2008,
  */
 
-package arjuna.JavaSim.Distributions;
+package org.javasim.streams;
 
 import java.io.IOException;
 
 /**
-  Return true or false with probability given when constructed. Uses a
-  UniformStream.
-  */
+ * Return true or false with probability given when constructed. Uses a
+ * UniformStream.
+ */
 
 public class Draw
 {
 
     /**
-      Probability of true is 'p'.
-      */
-    
-public Draw (double p)
+     * Probability of true is 'p'.
+     */
+
+    public Draw(double p)
     {
-	s = new UniformStream(0, 1);
-	prob = p;
+        s = new UniformStream(0, 1);
+        prob = p;
     }
 
     /**
-      Probability 'p'. Ignore the first 'StreamSelect' values before starting
-      to return values.
-      */
-    
-public Draw (double p, int StreamSelect)
+     * Probability 'p'. Ignore the first 'StreamSelect' values before starting
+     * to return values.
+     */
+
+    public Draw(double p, int StreamSelect)
     {
-	s = new UniformStream(0, 1, StreamSelect);
-	prob = p;
-    }
-	
-    /**
-      Probability 'p'. Ignore the first 'StreamSelect' values before starting
-      to return values. The seeds to the UniformStream are 'MGSeed'
-      and 'LGSeed'.
-      */
-    
-public Draw (double p, int StreamSelect, long MGSeed, long LCGSeed)
-    {
-	s = new UniformStream(0, 1, StreamSelect, MGSeed, LCGSeed);
-	prob = p;
+        s = new UniformStream(0, 1, StreamSelect);
+        prob = p;
     }
 
     /**
-      Return true with specified probability.
-      */
-    
-public boolean getBoolean () throws IOException
+     * Probability 'p'. Ignore the first 'StreamSelect' values before starting
+     * to return values. The seeds to the UniformStream are 'MGSeed' and
+     * 'LGSeed'.
+     */
+
+    public Draw(double p, int StreamSelect, long MGSeed, long LCGSeed)
     {
-	if (s.getNumber() >= prob)
-	    return true;
-	else
-	    return false;
+        s = new UniformStream(0, 1, StreamSelect, MGSeed, LCGSeed);
+        prob = p;
     }
-    
-private UniformStream s;
-private double prob;
+
+    /**
+     * Return true with specified probability.
+     */
+
+    public boolean getBoolean () throws IOException
+    {
+        if (s.getNumber() >= prob)
+            return true;
+        else
+            return false;
+    }
+
+    private UniformStream s;
+
+    private double prob;
 
 };

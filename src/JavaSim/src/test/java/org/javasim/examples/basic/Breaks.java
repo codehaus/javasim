@@ -18,64 +18,70 @@
  * (C) 1990-2008,
  */
 
-import arjuna.JavaSim.Simulation.*;
-import arjuna.JavaSim.Distributions.*;
+package org.javasim.examples.basic;
 
 import java.io.IOException;
-import arjuna.JavaSim.Simulation.SimulationException;
+
+import org.javasim.RestartException;
+import org.javasim.SimulationException;
+import org.javasim.SimulationProcess;
+import org.javasim.streams.UniformStream;
 
 public class Breaks extends SimulationProcess
 {
-    
-public Breaks ()
+
+    public Breaks()
     {
-	RepairTime = new UniformStream(10, 100);
-	OperativeTime = new UniformStream(200, 500);
-	interrupted_service = false;
+        RepairTime = new UniformStream(10, 100);
+        OperativeTime = new UniformStream(200, 500);
+        interrupted_service = false;
     }
 
-public void run ()
+    public void run ()
     {
-	for(;;)
-	{
-	    try
-	    {
-		double failedTime = RepairTime.getNumber();
-		
-		Hold(OperativeTime.getNumber());
+        for (;;)
+        {
+            try
+            {
+                double failedTime = RepairTime.getNumber();
 
-		MachineShop.M.Broken();
-		MachineShop.M.Cancel();
+                Hold(OperativeTime.getNumber());
 
-		if(!MachineShop.JobQ.IsEmpty())
-		    interrupted_service = true;
+                MachineShop.M.Broken();
+                MachineShop.M.Cancel();
 
-		Hold(failedTime);
+                if (!MachineShop.JobQ.IsEmpty())
+                    interrupted_service = true;
 
-		MachineShop.MachineFailedTime += failedTime;
-		MachineShop.M.Fixed();
-	
-		if (interrupted_service)
-		    MachineShop.M.ActivateAt(MachineShop.M.ServiceTime() + CurrentTime());
-		else
-		    MachineShop.M.Activate();
-		
-		interrupted_service = false;
-	    }
-	    catch (SimulationException e)
-	    {
-	    }
-	    catch (RestartException e)
-	    {
-	    }
-	    catch (IOException e)
-	    {
-	    }
-	}	
+                Hold(failedTime);
+
+                MachineShop.MachineFailedTime += failedTime;
+                MachineShop.M.Fixed();
+
+                if (interrupted_service)
+                    MachineShop.M.ActivateAt(MachineShop.M.ServiceTime()
+                            + CurrentTime());
+                else
+                    MachineShop.M.Activate();
+
+                interrupted_service = false;
+            }
+            catch (SimulationException e)
+            {
+            }
+            catch (RestartException e)
+            {
+            }
+            catch (IOException e)
+            {
+            }
+        }
     }
 
-private UniformStream RepairTime;
-private UniformStream OperativeTime;
-private boolean interrupted_service;
-    
+    private UniformStream RepairTime;
+
+    private UniformStream OperativeTime;
+
+    private boolean interrupted_service;
+
 };
