@@ -38,6 +38,8 @@ import org.javasim.internal.SimulationProcessList;
 public class SimulationProcess extends Thread
 {
 
+    public static final int NEVER = -1;
+
     public void finalize ()
     {
         if (!terminated)
@@ -587,8 +589,6 @@ public class SimulationProcess extends Thread
         passivated = true;
         wakeuptime = SimulationProcess.NEVER;
     }
-
-    public static final int NEVER = -1;
 
     protected static SimulationProcessList allProcesses = new SimulationProcessList();
 
