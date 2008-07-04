@@ -45,7 +45,15 @@ import java.lang.IllegalArgumentException;
 
 public class Histogram extends PrecisionHistogram
 {
+    
+    public static final int ACCUMULATE = 0;
 
+    public static final int MEAN = 1;
+
+    public static final int MAX = 2;
+
+    public static final int MIN = 3;
+    
     /**
      * Create with maximum index 'maxIndex' and specified 'mergeChoice', which
      * will be used if the buckets must be merged.
@@ -274,14 +282,6 @@ public class Histogram extends PrecisionHistogram
 
         throw new StatisticsException("compositeSize switch error.");
     }
-
-    public static final int ACCUMULATE = 0;
-
-    public static final int MEAN = 1;
-
-    public static final int MAX = 2;
-
-    public static final int MIN = 3;
 
     protected long maxSize;
 

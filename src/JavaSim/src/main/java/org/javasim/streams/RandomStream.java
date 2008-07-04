@@ -71,8 +71,8 @@ public abstract class RandomStream
     {
         series = new double[128];
 
-        MSeed = 772531;
-        LSeed = 1878892440;
+        mSeed = 772531;
+        lSeed = 1878892440;
 
         for (int i = 0; i < RandomStream.sizeOfSeries
                 / RandomStream.sizeOfDouble; i++)
@@ -94,8 +94,8 @@ public abstract class RandomStream
 
         // Initialise state
 
-        MSeed = MGSeed;
-        LSeed = LCGSeed;
+        mSeed = MGSeed;
+        lSeed = LCGSeed;
 
         for (int i = 0; i < RandomStream.sizeOfSeries
                 / RandomStream.sizeOfDouble; i++)
@@ -114,15 +114,15 @@ public abstract class RandomStream
 
         // Do the multiplication in pieces to avoid overflow
 
-        long p0 = LSeed % m1, p1 = LSeed / m1, q0 = b % m1, q1 = b / m1;
+        long p0 = lSeed % m1, p1 = lSeed / m1, q0 = b % m1, q1 = b / m1;
 
-        LSeed = (((((p0 * q1 + p1 * q0) % m1) * m1 + p0 * q0) % m) + 1) % m;
+        lSeed = (((((p0 * q1 + p1 * q0) % m1) * m1 + p0 * q0) % m) + 1) % m;
 
         // The results of the LC generator are shuffled with
         // the multiplicative generator as suggested by
         // Maclaren and Marsaglia (See Knuth Vol2, Seminumerical Algorithms)
 
-        long choose = LSeed
+        long choose = lSeed
                 % (RandomStream.sizeOfSeries / RandomStream.sizeOfDouble);
 
         double result = series[(int) choose];
@@ -140,16 +140,16 @@ public abstract class RandomStream
 
         long two2the26th = 67108864; // 2**26
 
-        MSeed = (MSeed * 25) % two2the26th;
-        MSeed = (MSeed * 25) % two2the26th;
-        MSeed = (MSeed * 5) % two2the26th;
+        mSeed = (mSeed * 25) % two2the26th;
+        mSeed = (mSeed * 25) % two2the26th;
+        mSeed = (mSeed * 5) % two2the26th;
 
-        return (double) MSeed / (double) two2the26th;
+        return (double) mSeed / (double) two2the26th;
     }
 
-    private long MSeed;
+    private long mSeed;
 
-    private long LSeed;
+    private long lSeed;
 
     private double[] series;
 

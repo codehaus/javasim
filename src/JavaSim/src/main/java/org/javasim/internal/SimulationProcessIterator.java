@@ -18,25 +18,60 @@
  * (C) 1990-2008,
  */
 
-package org.javasim.stats;
+package org.javasim.internal;
 
-/**
- * General exception thrown by the statistics gathering classes.
- */
+import org.javasim.SimulationProcess;
 
-public class StatisticsException extends Exception
+public class SimulationProcessIterator
 {
 
-    public static final long serialVersionUID = 0xdeadbeef;
-    
-    public StatisticsException()
+    public SimulationProcessIterator(SimulationProcessList L)
     {
-        super();
+        ptr = L.Head;
     }
 
-    public StatisticsException(String s)
+    public final synchronized SimulationProcess get ()
     {
-        super(s);
+        if (ptr != null)
+        {
+            SimulationProcessCons p = ptr;
+            ptr = ptr.cdr();
+            return p.car();
+        }
+
+        return null;
     }
 
-}
+    private SimulationProcessCons ptr;
+
+};
+
+class SimulationProcessCons
+{
+
+    public SimulationProcessCons(SimulationProcess p, SimulationProcessCons n)
+    {
+        Proc = p;
+        Next = n;
+    }
+
+    public final SimulationProcess car ()
+    {
+        return Proc;
+    }
+
+    public final SimulationProcessCons cdr ()
+    {
+        return Next;
+    }
+
+    public final void setfCdr (SimulationProcessCons n)
+    {
+        Next = n;
+    }
+
+    private SimulationProcess Proc;
+
+    private SimulationProcessCons Next;
+
+};

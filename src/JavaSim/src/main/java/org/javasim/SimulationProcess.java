@@ -33,6 +33,8 @@ package org.javasim;
 
 import java.util.NoSuchElementException;
 
+import org.javasim.internal.SimulationProcessList;
+
 public class SimulationProcess extends Thread
 {
 

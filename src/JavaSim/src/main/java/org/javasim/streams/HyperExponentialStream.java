@@ -41,11 +41,11 @@ public class HyperExponentialStream extends RandomStream
     {
         super();
 
-        Mean = m;
-        StandardDeviation = sd;
+        mean = m;
+        standardDeviation = sd;
 
         double cv, z;
-        cv = StandardDeviation / Mean;
+        cv = standardDeviation / mean;
         z = cv * cv;
         p = 0.5 * (1.0 - Math.sqrt((z - 1.0) / (z + 1.0)));
     }
@@ -59,11 +59,11 @@ public class HyperExponentialStream extends RandomStream
     {
         super();
 
-        Mean = m;
-        StandardDeviation = sd;
+        mean = m;
+        standardDeviation = sd;
 
         double cv, z;
-        cv = StandardDeviation / Mean;
+        cv = standardDeviation / mean;
         z = cv * cv;
         p = 0.5 * (1.0 - Math.sqrt((z - 1.0) / (z + 1.0)));
 
@@ -82,11 +82,11 @@ public class HyperExponentialStream extends RandomStream
     {
         super(MGSeed, LCGSeed);
 
-        Mean = m;
-        StandardDeviation = sd;
+        mean = m;
+        standardDeviation = sd;
 
         double cv, z;
-        cv = StandardDeviation / Mean;
+        cv = standardDeviation / mean;
         z = cv * cv;
         p = 0.5 * (1.0 - Math.sqrt((z - 1.0) / (z + 1.0)));
 
@@ -103,16 +103,16 @@ public class HyperExponentialStream extends RandomStream
         double z = 0;
 
         if (uniform() > p)
-            z = Mean / (1.0 - p);
+            z = mean / (1.0 - p);
         else
-            z = Mean / p;
+            z = mean / p;
 
         return -0.5 * z * Math.log(uniform());
     }
 
-    private double Mean;
+    private double mean;
 
-    private double StandardDeviation;
+    private double standardDeviation;
 
     private double p;
 

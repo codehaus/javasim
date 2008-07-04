@@ -40,8 +40,8 @@ public class NormalStream extends RandomStream
     {
         super();
 
-        Mean = m;
-        StandardDeviation = sd;
+        mean = m;
+        standardDeviation = sd;
         z = 0.0;
     }
 
@@ -54,8 +54,8 @@ public class NormalStream extends RandomStream
     {
         super();
 
-        Mean = m;
-        StandardDeviation = sd;
+        mean = m;
+        standardDeviation = sd;
         z = 0.0;
 
         for (int ss = 0; ss < StreamSelect * 1000; ss++)
@@ -73,8 +73,8 @@ public class NormalStream extends RandomStream
     {
         super(MGSeed, LCGSeed);
 
-        Mean = m;
-        StandardDeviation = sd;
+        mean = m;
+        standardDeviation = sd;
         z = 0.0;
 
         for (int ss = 0; ss < StreamSelect * 1000; ss++)
@@ -115,12 +115,12 @@ public class NormalStream extends RandomStream
             z = v2 * S;
         }
 
-        return Mean + X2 * StandardDeviation;
+        return mean + X2 * standardDeviation;
     }
 
-    private double Mean;
+    private double mean;
 
-    private double StandardDeviation;
+    private double standardDeviation;
 
     private double z;
 

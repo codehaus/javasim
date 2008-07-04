@@ -33,6 +33,9 @@ package org.javasim;
 
 import java.util.NoSuchElementException;
 
+import org.javasim.internal.SimulationProcessIterator;
+import org.javasim.internal.SimulationProcessList;
+
 /**
  * This is the scheduler: the heart of the simulation system.
  * 

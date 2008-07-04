@@ -20,6 +20,7 @@
 
 package org.javasim;
 
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class TriggerQueue
@@ -27,7 +28,7 @@ public class TriggerQueue
 
     public TriggerQueue()
     {
-        head = new SimulationEntityList();
+        head = new LinkedList<SimulationEntity>();
     }
 
     /**
@@ -40,7 +41,7 @@ public class TriggerQueue
     {
         if (head != null)
         {
-            if (head.numberOfElements() > 0)
+            if (head.size() > 0)
             {
                 System.out
                         .println("TriggerQueue destructor called with non-zero list!");
@@ -59,7 +60,7 @@ public class TriggerQueue
     public synchronized void triggerFirst (boolean setTrigger)
             throws NoSuchElementException
     {
-        if (head.numberOfElements() == 0)
+        if (head.size() == 0)
             throw (new NoSuchElementException());
 
         SimulationEntity removed = this.remove();
@@ -86,7 +87,7 @@ public class TriggerQueue
 
     public synchronized void triggerAll () throws NoSuchElementException
     {
-        long currentNumber = head.numberOfElements();
+        long currentNumber = head.size();
 
         if (currentNumber == 0)
             throw (new NoSuchElementException());
@@ -110,66 +111,6 @@ public class TriggerQueue
         return head.removeFirst();
     }
 
-    private SimulationEntityList head;
+    private LinkedList<SimulationEntity> head;
 
-    private long numberOfElements;
-
-};
-
-class SimulationEntityElement
-{
-
-    public SimulationEntityElement(SimulationEntity toAdd)
-    {
-        _element = toAdd;
-        _next = null;
-    }
-
-    public SimulationEntity _element;
-
-    public SimulationEntityElement _next;
-
-};
-
-class SimulationEntityList
-{
-
-    public SimulationEntityList()
-    {
-        headOfList = null;
-        _numberOfElements = 0;
-    }
-
-    public final long numberOfElements ()
-    {
-        return _numberOfElements;
-    }
-
-    public final synchronized void add (SimulationEntity toAdd)
-    {
-        SimulationEntityElement ptr = new SimulationEntityElement(toAdd);
-
-        ptr._next = headOfList;
-        headOfList = ptr;
-        _numberOfElements++;
-    }
-
-    public final synchronized SimulationEntity removeFirst ()
-            throws NoSuchElementException
-    {
-        if (_numberOfElements == 0)
-            throw (new NoSuchElementException());
-
-        SimulationEntityElement ptr = headOfList;
-
-        headOfList = headOfList._next;
-        _numberOfElements--;
-
-        return ptr._element;
-    }
-
-    private SimulationEntityElement headOfList;
-
-    private long _numberOfElements;
-
-};
+}

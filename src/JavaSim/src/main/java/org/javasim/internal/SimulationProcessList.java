@@ -18,9 +18,11 @@
  * (C) 1990-2008,
  */
 
-package org.javasim;
+package org.javasim.internal;
 
 import java.util.NoSuchElementException;
+
+import org.javasim.SimulationProcess;
 
 public class SimulationProcessList
 {
@@ -204,58 +206,4 @@ public class SimulationProcessList
 
     protected SimulationProcessCons Head;
 
-};
-
-class SimulationProcessIterator
-{
-
-    public SimulationProcessIterator(SimulationProcessList L)
-    {
-        ptr = L.Head;
-    }
-
-    public final synchronized SimulationProcess get ()
-    {
-        if (ptr != null)
-        {
-            SimulationProcessCons p = ptr;
-            ptr = ptr.cdr();
-            return p.car();
-        }
-
-        return null;
-    }
-
-    private SimulationProcessCons ptr;
-
-};
-
-class SimulationProcessCons
-{
-
-    public SimulationProcessCons(SimulationProcess p, SimulationProcessCons n)
-    {
-        Proc = p;
-        Next = n;
-    }
-
-    public final SimulationProcess car ()
-    {
-        return Proc;
-    }
-
-    public final SimulationProcessCons cdr ()
-    {
-        return Next;
-    }
-
-    public final void setfCdr (SimulationProcessCons n)
-    {
-        Next = n;
-    }
-
-    private SimulationProcess Proc;
-
-    private SimulationProcessCons Next;
-
-};
+}
