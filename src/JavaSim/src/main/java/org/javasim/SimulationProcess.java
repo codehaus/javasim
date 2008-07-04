@@ -44,7 +44,7 @@ public class SimulationProcess extends Thread
         {
             terminated = true;
             passivated = true;
-            wakeuptime = SimulationProcess.Never;
+            wakeuptime = SimulationProcess.NEVER;
 
             if (!idle())
                 Scheduler.unschedule(this); // remove from scheduler queue
@@ -340,7 +340,7 @@ public class SimulationProcess extends Thread
 
             if (this == SimulationProcess.Current)
             {
-                wakeuptime = SimulationProcess.Never;
+                wakeuptime = SimulationProcess.NEVER;
                 passivated = true;
                 suspendProcess();
             }
@@ -360,7 +360,7 @@ public class SimulationProcess extends Thread
         if (!terminated)
         {
             terminated = passivated = true;
-            wakeuptime = SimulationProcess.Never;
+            wakeuptime = SimulationProcess.NEVER;
 
             if ((this != SimulationProcess.Current) && (!idle()))
                 Scheduler.unschedule(this);
@@ -455,7 +455,7 @@ public class SimulationProcess extends Thread
 
     protected SimulationProcess()
     {
-        wakeuptime = SimulationProcess.Never;
+        wakeuptime = SimulationProcess.NEVER;
         terminated = false;
         passivated = true;
         started = false;
@@ -485,7 +485,7 @@ public class SimulationProcess extends Thread
         if ((this == SimulationProcess.Current)
                 || (SimulationProcess.Current == null))
         {
-            wakeuptime = SimulationProcess.Never;
+            wakeuptime = SimulationProcess.NEVER;
             activateDelay(t, false);
             suspendProcess();
         }
@@ -585,10 +585,10 @@ public class SimulationProcess extends Thread
     void deactivate ()
     {
         passivated = true;
-        wakeuptime = SimulationProcess.Never;
+        wakeuptime = SimulationProcess.NEVER;
     }
 
-    public static final int Never = -1;
+    public static final int NEVER = -1;
 
     protected static SimulationProcessList allProcesses = new SimulationProcessList();
 
