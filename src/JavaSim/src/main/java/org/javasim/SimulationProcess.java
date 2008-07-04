@@ -40,10 +40,10 @@ public class SimulationProcess extends Thread
 
     public void finalize ()
     {
-        if (!Terminated)
+        if (!terminated)
         {
-            Terminated = true;
-            Passivated = true;
+            terminated = true;
+            passivated = true;
             wakeuptime = SimulationProcess.Never;
 
             if (!idle())
@@ -104,10 +104,10 @@ public class SimulationProcess extends Thread
     public void activateBefore (SimulationProcess p)
             throws SimulationException, RestartException
     {
-        if (Terminated || !idle())
+        if (terminated || !idle())
             return;
 
-        Passivated = false;
+        passivated = false;
 
         if (Scheduler.getQueue().insertBefore(this, p))
             wakeuptime = p.wakeuptime;
@@ -123,10 +123,10 @@ public class SimulationProcess extends Thread
     public void activateAfter (SimulationProcess p) throws SimulationException,
             RestartException
     {
-        if (Terminated || !idle())
+        if (terminated || !idle())
             return;
 
-        Passivated = false;
+        passivated = false;
 
         if (Scheduler.getQueue().insertAfter(this, p))
             wakeuptime = p.wakeuptime;
@@ -145,13 +145,13 @@ public class SimulationProcess extends Thread
     public void activateAt (double AtTime, boolean prior)
             throws SimulationException, RestartException
     {
-        if (Terminated || !idle())
+        if (terminated || !idle())
             return;
 
         if (AtTime < SimulationProcess.currentTime())
             throw new SimulationException("Invalid time " + AtTime);
 
-        Passivated = false;
+        passivated = false;
         wakeuptime = AtTime;
         Scheduler.getQueue().insert(this, prior);
     }
@@ -179,13 +179,13 @@ public class SimulationProcess extends Thread
     public void activateDelay (double Delay, boolean prior)
             throws SimulationException, RestartException
     {
-        if (Terminated || !idle())
+        if (terminated || !idle())
             return;
 
         if (!checkTime(Delay))
             throw new SimulationException("Invalid delay time " + Delay);
 
-        Passivated = false;
+        passivated = false;
         wakeuptime = Scheduler.getSimulationTime() + Delay;
         Scheduler.getQueue().insert(this, prior);
     }
@@ -209,10 +209,10 @@ public class SimulationProcess extends Thread
 
     public void activate () throws SimulationException, RestartException
     {
-        if (Terminated || !idle())
+        if (terminated || !idle())
             return;
 
-        Passivated = false;
+        passivated = false;
         wakeuptime = currentTime();
         Scheduler.getQueue().insert(this, true);
     }
@@ -341,7 +341,7 @@ public class SimulationProcess extends Thread
             if (this == SimulationProcess.Current)
             {
                 wakeuptime = SimulationProcess.Never;
-                Passivated = true;
+                passivated = true;
                 suspendProcess();
             }
             else
@@ -357,9 +357,9 @@ public class SimulationProcess extends Thread
 
     public void terminate ()
     {
-        if (!Terminated)
+        if (!terminated)
         {
-            Terminated = Passivated = true;
+            terminated = passivated = true;
             wakeuptime = SimulationProcess.Never;
 
             if ((this != SimulationProcess.Current) && (!idle()))
@@ -397,7 +397,7 @@ public class SimulationProcess extends Thread
 
     public boolean passivated ()
     {
-        return Passivated;
+        return passivated;
     }
 
     /**
@@ -406,7 +406,7 @@ public class SimulationProcess extends Thread
 
     public boolean terminated ()
     {
-        return Terminated;
+        return terminated;
     }
 
     /**
@@ -456,8 +456,8 @@ public class SimulationProcess extends Thread
     protected SimulationProcess()
     {
         wakeuptime = SimulationProcess.Never;
-        Terminated = false;
-        Passivated = true;
+        terminated = false;
+        passivated = true;
         started = false;
 
         SimulationProcess.allProcesses.insert(this);
@@ -495,7 +495,7 @@ public class SimulationProcess extends Thread
 
     protected void passivate () throws RestartException
     {
-        if (!Passivated && (this == SimulationProcess.Current))
+        if (!passivated && (this == SimulationProcess.Current))
             cancel();
     }
 
@@ -554,7 +554,7 @@ public class SimulationProcess extends Thread
             wakeuptime = SimulationProcess.currentTime();
         }
 
-        if (!Terminated)
+        if (!terminated)
         {
             if (!started)
             {
@@ -584,7 +584,7 @@ public class SimulationProcess extends Thread
 
     void deactivate ()
     {
-        Passivated = true;
+        passivated = true;
         wakeuptime = SimulationProcess.Never;
     }
 
@@ -594,9 +594,9 @@ public class SimulationProcess extends Thread
 
     private double wakeuptime;
 
-    private boolean Terminated;
+    private boolean terminated;
 
-    private boolean Passivated;
+    private boolean passivated;
 
     private boolean started;
 
