@@ -440,7 +440,17 @@ public class SimulationProcess extends Thread
     {
         SimulationProcess.mainThread = Thread.currentThread();
 
-        SimulationProcess.mainThread.suspend();
+        synchronized (SimulationProcess.mainThread)
+        {
+            try
+            {
+                SimulationProcess.mainThread.wait();
+            }
+            catch (final Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -452,7 +462,17 @@ public class SimulationProcess extends Thread
         if (SimulationProcess.mainThread == null)
             throw new SimulationException("No main thread");
 
-        SimulationProcess.mainThread.resume();
+        synchronized (SimulationProcess.mainThread)
+        {
+            try
+            {
+                SimulationProcess.mainThread.notify();
+            }
+            catch (final Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
     }
 
     protected SimulationProcess()
