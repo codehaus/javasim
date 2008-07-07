@@ -39,7 +39,7 @@ public class Breaks extends SimulationProcess
 
     public void run ()
     {
-        for (;;)
+        while (!terminated())
         {
             try
             {

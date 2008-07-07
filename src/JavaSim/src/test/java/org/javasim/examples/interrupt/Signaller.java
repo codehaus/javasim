@@ -37,7 +37,7 @@ public class Signaller extends SimulationEntity
 
     public void run ()
     {
-        for (;;)
+        while (!terminated())
         {
             try
             {

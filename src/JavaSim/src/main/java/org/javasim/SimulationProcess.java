@@ -376,8 +376,6 @@ public class SimulationProcess extends Thread
             }
 
             SimulationProcess.allProcesses.remove(this);
-
-            stop();
         }
     }
 
@@ -610,7 +608,7 @@ public class SimulationProcess extends Thread
         wakeuptime = SimulationProcess.NEVER;
     }
 
-    protected static SimulationProcessList allProcesses = new SimulationProcessList();
+    private static SimulationProcessList allProcesses = new SimulationProcessList();
 
     private double wakeuptime;
 

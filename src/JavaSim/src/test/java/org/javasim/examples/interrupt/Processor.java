@@ -39,7 +39,7 @@ public class Processor extends SimulationEntity
     {
         Job j = null;
 
-        for (;;)
+        while (!terminated())
         {
             try
             {

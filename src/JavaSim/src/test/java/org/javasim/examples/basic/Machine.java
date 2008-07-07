@@ -42,7 +42,7 @@ public class Machine extends SimulationProcess
     {
         double ActiveStart, ActiveEnd;
 
-        for (;;)
+        while (!terminated())
         {
             working = true;
 

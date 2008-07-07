@@ -37,7 +37,7 @@ public class Arrivals extends SimulationProcess
 
     public void run ()
     {
-        for (;;)
+        while (!terminated())
         {
             try
             {
@@ -53,7 +53,7 @@ public class Arrivals extends SimulationProcess
             {
             }
 
-            Job work = new Job(false);
+            new Job(false);
         }
     }
 
