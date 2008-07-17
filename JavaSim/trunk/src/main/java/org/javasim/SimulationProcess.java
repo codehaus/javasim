@@ -608,7 +608,7 @@ public class SimulationProcess extends Thread
         wakeuptime = SimulationProcess.NEVER;
     }
 
-    private static SimulationProcessList allProcesses = new SimulationProcessList();
+    static SimulationProcessList allProcesses = new SimulationProcessList();
 
     private double wakeuptime;
 
