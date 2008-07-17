@@ -21,189 +21,255 @@
 package org.javasim.internal;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.javasim.SimulationProcess;
 
 public class SimulationProcessList
 {
 
-    public SimulationProcessList()
-    {
-        Head = null;
-    }
+   private Lock instanceLock = new ReentrantLock();
 
-    public synchronized void insert (SimulationProcess p)
-    {
-        insert(p, false);
-    }
+   public SimulationProcessList()
+   {
+      Head = null;
+   }
 
-    public synchronized void insert (SimulationProcess p, boolean prior)
-    {
-        // If list is empty, insert at head
+   public void insert (SimulationProcess p)
+   {
+      insert(p, false);
+   }
 
-        if (Head == null)
-        {
+   public void insert (SimulationProcess p, boolean prior)
+   {
+      // If list is empty, insert at head
+
+      instanceLock.lock();
+      try
+      {
+
+
+
+         if (Head == null)
+         {
             Head = new SimulationProcessCons(p, null);
             return;
-        }
+         }
 
-        // Try to insert before (if there is anything scheduled later)
+         // Try to insert before (if there is anything scheduled later)
 
-        SimulationProcessIterator iter = new SimulationProcessIterator(this);
-        SimulationProcess prev = null;
+         SimulationProcessIterator iter = new SimulationProcessIterator(this);
+         SimulationProcess prev = null;
 
-        for (SimulationProcess q = iter.get(); q != null; prev = q, q = iter
-                .get())
-        {
+         for (SimulationProcess q = iter.get(); q != null; prev = q, q = iter
+           .get())
+         {
             if (prior)
             {
-                if (q.evtime() >= p.evtime())
-                {
-                    insertBefore(p, q);
-                    return;
-                }
+               if (q.evtime() >= p.evtime())
+               {
+                  insertBefore(p, q);
+                  return;
+               }
             }
             else
             {
-                if (q.evtime() > p.evtime())
-                {
-                    insertBefore(p, q);
-                    return;
-                }
+               if (q.evtime() > p.evtime())
+               {
+                  insertBefore(p, q);
+                  return;
+               }
             }
-        }
+         }
 
-        // Got to insert at the end (currently pointed at by 'prev')
+         // Got to insert at the end (currently pointed at by 'prev')
 
-        insertAfter(p, prev);
-    }
+         insertAfter(p, prev);
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    public synchronized boolean insertBefore (SimulationProcess ToInsert,
-            SimulationProcess Before)
-    {
-        for (SimulationProcessCons prev = null, p = Head; p != null; prev = p, p = p
-                .cdr())
-        {
+   public boolean insertBefore (SimulationProcess ToInsert,
+                                SimulationProcess Before)
+   {
+      instanceLock.lock();
+
+      try
+      {
+
+
+         for (SimulationProcessCons prev = null, p = Head; p != null; prev = p, p = p
+           .cdr())
+         {
             if (p.car() == Before)
             {
-                SimulationProcessCons newcons = new SimulationProcessCons(
-                        ToInsert, p);
-                if (prev != null)
-                    prev.setfCdr(newcons);
-                else
-                    Head = newcons;
+               SimulationProcessCons newcons = new SimulationProcessCons(
+                 ToInsert, p);
+               if (prev != null)
+                  prev.setfCdr(newcons);
+               else
+                  Head = newcons;
 
-                return true;
+               return true;
             }
-        }
+         }
 
-        return false;
-    }
+         return false;
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    public synchronized boolean insertAfter (SimulationProcess ToInsert,
-            SimulationProcess After)
-    {
-        for (SimulationProcessCons p = Head; p != null; p = p.cdr())
+   public boolean insertAfter (SimulationProcess ToInsert,
+                               SimulationProcess After)
+   {
+      instanceLock.lock();
+      try
+      {
+         for (SimulationProcessCons p = Head; p != null; p = p.cdr())
             if (p.car() == After)
             {
-                SimulationProcessCons newcons = new SimulationProcessCons(
-                        ToInsert, p.cdr());
-                p.setfCdr(newcons);
-                return true;
+               SimulationProcessCons newcons = new SimulationProcessCons(
+                 ToInsert, p.cdr());
+               p.setfCdr(newcons);
+               return true;
             }
 
-        return false;
-    }
+         return false;
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    public synchronized SimulationProcess remove (SimulationProcess element)
-            throws NoSuchElementException
-    {
-        // Take care of boundary condition - empty list
+   public SimulationProcess remove (SimulationProcess element)
+     throws NoSuchElementException
+   {
+      // Take care of boundary condition - empty list
 
-        if (Head == null)
+      instanceLock.lock();
+      try
+      {
+         if (Head == null)
             throw (new NoSuchElementException());
 
-        SimulationProcess p = null;
+         SimulationProcess p = null;
 
-        for (SimulationProcessCons prev = null, ptr = Head; ptr != null; prev = ptr, ptr = ptr
-                .cdr())
-        {
+         for (SimulationProcessCons prev = null, ptr = Head; ptr != null; prev = ptr, ptr = ptr
+           .cdr())
+         {
             if (ptr.car() == element)
             {
-                SimulationProcessCons oldcons = ptr;
+               SimulationProcessCons oldcons = ptr;
 
-                // unlink the cons cell for the element we're removing
+               // unlink the cons cell for the element we're removing
 
-                if (prev != null)
-                    prev.setfCdr(ptr.cdr());
-                else
-                    Head = ptr.cdr();
+               if (prev != null)
+                  prev.setfCdr(ptr.cdr());
+               else
+                  Head = ptr.cdr();
 
-                // return the pointer to the process
-                p = ptr.car();
+               // return the pointer to the process
+               p = ptr.car();
 
-                return p;
+               return p;
             }
-        }
+         }
 
-        throw (new NoSuchElementException());
-    }
+         throw (new NoSuchElementException());
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    public synchronized SimulationProcess remove ()
-            throws NoSuchElementException
-    {
-        // Change unspecified element to "remove head of list" request
+   public SimulationProcess remove ()
+     throws NoSuchElementException
+   {
+      // Change unspecified element to "remove head of list" request
 
-        if (Head != null)
+      instanceLock.lock();
+      try
+      {
+         if (Head != null)
             return (remove(Head.car()));
-        else
+         else
             throw (new NoSuchElementException());
-    }
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    public synchronized SimulationProcess getNext (SimulationProcess current)
-            throws NoSuchElementException
-    {
-        // take care of boundary condition - empty list.
+   public SimulationProcess getNext (SimulationProcess current)
+     throws NoSuchElementException
+   {
+      // take care of boundary condition - empty list.
 
-        if ((Head == null) || (current == null))
+      instanceLock.lock();
+      try
+      {
+         if ((Head == null) || (current == null))
             throw (new NoSuchElementException());
 
-        for (SimulationProcessCons ptr = Head; ptr != null; ptr = ptr.cdr())
-        {
+         for (SimulationProcessCons ptr = Head; ptr != null; ptr = ptr.cdr())
+         {
             if (ptr.car() == current)
             {
-                if (ptr.cdr() == null)
-                    return null;
-                else
-                    return ptr.cdr().car();
+               if (ptr.cdr() == null)
+                  return null;
+               else
+                  return ptr.cdr().car();
             }
             else // terminate search - past the point current could be
-            if (ptr.car().evtime() > current.evtime())
-                break;
-        }
+               if (ptr.car().evtime() > current.evtime())
+                  break;
+         }
 
-        /*
+         /*
          * If we get here then we have not found current on the list which can
          * only mean that it is currently active.
          */
 
-        return Head.car();
-    }
+         return Head.car();
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    public void print ()
-    {
-        SimulationProcessIterator iter = new SimulationProcessIterator(this);
-        SimulationProcess prev = null;
+   public void print ()
+   {
+      instanceLock.lock();
+      try
+      {
+         SimulationProcessIterator iter = new SimulationProcessIterator(this);
+         SimulationProcess prev = null;
 
-        for (SimulationProcess q = iter.get(); q != null; prev = q, q = iter
-                .get())
-        {
-            System.out.println(q.evtime());
-        }
-    }
+         for (SimulationProcess q = iter.get(); q != null; prev = q, q = iter
+           .get())
+         {
+            // [HB] System.out.println(q.evtime());
+         }
+      }
+      finally
+      {
+         instanceLock.unlock();
+      }
+   }
 
-    // package?
+   // package?
 
-    protected SimulationProcessCons Head;
+   protected SimulationProcessCons Head;
 
 }

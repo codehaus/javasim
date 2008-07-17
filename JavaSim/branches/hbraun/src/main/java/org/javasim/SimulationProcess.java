@@ -31,599 +31,641 @@
 
 package org.javasim;
 
-import java.util.NoSuchElementException;
-
 import org.javasim.internal.SimulationProcessList;
+import org.javasim.util.ThreadUtil;
+
+import java.util.NoSuchElementException;
 
 public class SimulationProcess extends Thread
 {
 
-    public static final int NEVER = -1;
-
-    public void finalize ()
-    {
-        if (!terminated)
-        {
-            terminated = true;
-            passivated = true;
-            wakeuptime = SimulationProcess.NEVER;
-
-            if (!idle())
-                Scheduler.unschedule(this); // remove from scheduler queue
-
-            if (this == SimulationProcess.Current)
-            {
-                try
-                {
-                    Scheduler.schedule();
-                }
-                catch (SimulationException e)
-                {
-                }
-            }
-
-            SimulationProcess.allProcesses.remove(this);
-        }
-    }
-
-    /**
-     * Return the current simulation time.
-     */
-
-    public final double time ()
-    {
-        return SimulationProcess.currentTime();
-    }
-
-    /**
-     * Return the next simulation process which will run.
-     */
-
-    public synchronized SimulationProcess nextEv ()
-            throws SimulationException, NoSuchElementException
-    {
-        if (!idle())
-            return Scheduler.getQueue().getNext(this);
-        else
-            throw (new SimulationException(
-                    "SimulationProcess not on run queue."));
-    }
-
-    /**
-     * Return the simulation time at which this process will run.
-     */
-
-    public final double evtime ()
-    {
-        return wakeuptime;
-    }
-
-    /**
-     * Activate this process before process 'p'. This process must not be
-     * running, or on the scheduler queue.
-     */
-
-    public void activateBefore (SimulationProcess p)
-            throws SimulationException, RestartException
-    {
-        if (terminated || !idle())
-            return;
-
-        passivated = false;
-
-        if (Scheduler.getQueue().insertBefore(this, p))
-            wakeuptime = p.wakeuptime;
-        else
-            throw new SimulationException("'before' process is not scheduled.");
-    }
-
-    /**
-     * Activate this process after process 'p'. This process must not be
-     * running, or on the scheduler queue.
-     */
-
-    public void activateAfter (SimulationProcess p) throws SimulationException,
-            RestartException
-    {
-        if (terminated || !idle())
-            return;
-
-        passivated = false;
-
-        if (Scheduler.getQueue().insertAfter(this, p))
-            wakeuptime = p.wakeuptime;
-        else
-            throw new SimulationException("'after' process is not scheduled.");
-    }
-
-    /**
-     * Activate this process at the specified simulation time. This process must
-     * not be running, or on the scheduler queue. 'AtTime' must be greater than,
-     * or equal to, the current simulation time. If 'prior' is true then this
-     * process will appear in the simulation queue before any other process with
-     * the same simulation time.
-     */
-
-    public void activateAt (double AtTime, boolean prior)
-            throws SimulationException, RestartException
-    {
-        if (terminated || !idle())
-            return;
-
-        if (AtTime < SimulationProcess.currentTime())
-            throw new SimulationException("Invalid time " + AtTime);
-
-        passivated = false;
-        wakeuptime = AtTime;
-        Scheduler.getQueue().insert(this, prior);
-    }
-
-    /**
-     * Activate this process at the specified simulation time. This process must
-     * not be running, or on the scheduler queue. 'AtTime' must be greater than,
-     * or equal to, the current simulation time.
-     */
-
-    public void activateAt (double AtTime) throws SimulationException,
-            RestartException
-    {
-        activateAt(AtTime, false);
-    }
-
-    /**
-     * This process will be activated after 'Delay' units of simulation time.
-     * This process must not be running, or on the scheduler queue. 'Delay' must
-     * be greater than, or equal to, zero. If 'prior' is true then this process
-     * will appear in the simulation queue before any other process with the
-     * same simulation time.
-     */
-
-    public void activateDelay (double Delay, boolean prior)
-            throws SimulationException, RestartException
-    {
-        if (terminated || !idle())
-            return;
-
-        if (!checkTime(Delay))
-            throw new SimulationException("Invalid delay time " + Delay);
-
-        passivated = false;
-        wakeuptime = Scheduler.getSimulationTime() + Delay;
-        Scheduler.getQueue().insert(this, prior);
-    }
-
-    /**
-     * This process will be activated after 'Delay' units of simulation time.
-     * This process must not be running, or on the scheduler queue. 'Delay' must
-     * be greater than, or equal to, zero.
-     */
-
-    public void activateDelay (double Delay) throws SimulationException,
-            RestartException
-    {
-        activateDelay(Delay, false);
-    }
-
-    /**
-     * Activate this process at the current simulation time. This process must
-     * not be running, or on the scheduler queue.
-     */
-
-    public void activate () throws SimulationException, RestartException
-    {
-        if (terminated || !idle())
-            return;
-
-        passivated = false;
-        wakeuptime = currentTime();
-        Scheduler.getQueue().insert(this, true);
-    }
-
-    /**
-     * Reactivate this process before process 'p'.
-     */
-
-    public void reactivateBefore (SimulationProcess p)
-            throws SimulationException, RestartException
-    {
-        if (!idle())
-            Scheduler.unschedule(this);
-
-        activateBefore(p);
-
-        if (SimulationProcess.Current == this)
-            suspendProcess();
-    }
-
-    /**
-     * Reactivate this process after process 'p'.
-     */
-
-    public void reactivateAfter (SimulationProcess p)
-            throws SimulationException, RestartException
-    {
-        if (!idle())
-            Scheduler.unschedule(this);
-
-        activateAfter(p);
-
-        if (SimulationProcess.Current == this)
-            suspendProcess();
-    }
-
-    /**
-     * Reactivate this process at the specified simulation time. 'AtTime' must
-     * be valid. If 'prior' is true then this process will appear in the
-     * simulation queue before any other process with the same simulation time.
-     */
-
-    public void reactivateAt (double AtTime, boolean prior)
-            throws SimulationException, RestartException
-    {
-        if (!idle())
-            Scheduler.unschedule(this);
-
-        activateAt(AtTime, prior);
-
-        if (SimulationProcess.Current == this)
-        {
-            suspendProcess();
-        }
-    }
-
-    /**
-     * Reactivate this process at the specified simulation time. 'AtTime' must
-     * be valid.
-     */
-
-    public void reactivateAt (double AtTime) throws SimulationException,
-            RestartException
-    {
-        reactivateAt(AtTime, false);
-    }
-
-    /**
-     * Reactivate this process after 'Delay' units of simulation time. If
-     * 'prior' is true then this process will appear in the simulation queue
-     * before any other process with the same simulation time.
-     */
-
-    public void reactivateDelay (double Delay, boolean prior)
-            throws SimulationException, RestartException
-    {
-        if (!idle())
-            Scheduler.unschedule(this);
-
-        activateDelay(Delay, prior);
-
-        if (SimulationProcess.Current == this)
-            suspendProcess();
-    }
-
-    /**
-     * Reactivate this process after 'Delay' units of simulation time.
-     */
-
-    public void reactivateDelay (double Delay) throws SimulationException,
-            RestartException
-    {
-        reactivateDelay(Delay, false);
-    }
-
-    /**
-     * Reactivate this process at the current simulation time.
-     */
-
-    public void reactivate () throws SimulationException, RestartException
-    {
-        if (!idle())
-            Scheduler.unschedule(this);
-
-        activate();
-
-        if (SimulationProcess.Current == this)
-            suspendProcess();
-    }
-
-    /**
-     * Cancels next burst of activity, process becomes idle.
-     */
-
-    public void cancel () throws RestartException
-    {
-        /*
-         * We must suspend this process either by removing it from the scheduler
-         * queue (if it is already suspended) or by calling suspend directly.
-         */
-
-        if (!idle()) // process is running or on queue to be run
-        {
-            // currently active, so simply suspend
-
-            if (this == SimulationProcess.Current)
-            {
-                wakeuptime = SimulationProcess.NEVER;
-                passivated = true;
-                suspendProcess();
-            }
-            else
-            {
-                Scheduler.unschedule(this); // remove from queue
-            }
-        }
-    }
-
-    /**
-     * Terminate this process: no going back!
-     */
-
-    public void terminate ()
-    {
-        if (!terminated)
-        {
-            terminated = passivated = true;
-            wakeuptime = SimulationProcess.NEVER;
-
-            if ((this != SimulationProcess.Current) && (!idle()))
-                Scheduler.unschedule(this);
-
+   public static final int NEVER = -1;
+
+   public void finalize ()
+   {
+      if (!terminated)
+      {
+         terminated = true;
+         passivated = true;
+         wakeuptime = SimulationProcess.NEVER;
+
+         if (!idle())
+            Scheduler.unschedule(this); // remove from scheduler queue
+
+         if (this == SimulationProcess.Current)
+         {
             try
             {
-                Scheduler.schedule();
+               Scheduler.schedule();
             }
             catch (SimulationException e)
             {
             }
+         }
 
-            SimulationProcess.allProcesses.remove(this);
-        }
-    }
+         SimulationProcess.allProcesses.remove(this);
+      }
+   }
 
-    /**
-     * Is the process idle?
-     */
+   /**
+    * Return the current simulation time.
+    */
 
-    public synchronized boolean idle ()
-    {
-        if (wakeuptime >= SimulationProcess.currentTime())
-            return false;
-        else
-            return true;
-    }
+   public final double time ()
+   {
+      return SimulationProcess.currentTime();
+   }
 
-    /**
-     * Has the process been passivated?
-     */
+   /**
+    * Return the next simulation process which will run.
+    */
 
-    public boolean passivated ()
-    {
-        return passivated;
-    }
+   public synchronized SimulationProcess nextEv ()
+     throws SimulationException, NoSuchElementException
+   {
+      if (!idle())
+         return Scheduler.getQueue().getNext(this);
+      else
+         throw (new SimulationException(
+           "SimulationProcess not on run queue."));
+   }
 
-    /**
-     * Has the process been terminated?
-     */
+   /**
+    * Return the simulation time at which this process will run.
+    */
 
-    public boolean terminated ()
-    {
-        return terminated;
-    }
+   public final double evtime ()
+   {
+      return wakeuptime;
+   }
 
-    /**
-     * Return the currently active simulation process.
-     */
+   /**
+    * Activate this process before process 'p'. This process must not be
+    * running, or on the scheduler queue.
+    */
 
-    public static SimulationProcess current () throws SimulationException
-    {
-        if (SimulationProcess.Current == null)
-            throw new SimulationException("Current not set.");
+   public void activateBefore (SimulationProcess p)
+     throws SimulationException, RestartException
+   {
+      if (terminated || !idle())
+         return;
 
-        return SimulationProcess.Current;
-    }
+      passivated = false;
 
-    /**
-     * Return the current simulation time.
-     */
+      if (Scheduler.getQueue().insertBefore(this, p))
+         wakeuptime = p.wakeuptime;
+      else
+         throw new SimulationException("'before' process is not scheduled.");
+   }
 
-    public static double currentTime ()
-    {
-        return Scheduler.getSimulationTime();
-    }
+   /**
+    * Activate this process after process 'p'. This process must not be
+    * running, or on the scheduler queue.
+    */
 
-    /**
-     * Suspend the main thread.
-     */
+   public void activateAfter (SimulationProcess p) throws SimulationException,
+     RestartException
+   {
+      if (terminated || !idle())
+         return;
 
-    public static void mainSuspend ()
-    {
-        SimulationProcess.mainThread = Thread.currentThread();
+      passivated = false;
 
-        synchronized (SimulationProcess.mainThread)
-        {
-            try
-            {
-                SimulationProcess.mainThread.wait();
-            }
-            catch (final Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-    }
+      if (Scheduler.getQueue().insertAfter(this, p))
+         wakeuptime = p.wakeuptime;
+      else
+         throw new SimulationException("'after' process is not scheduled.");
+   }
 
-    /**
-     * Resume the main thread.
-     */
+   /**
+    * Activate this process at the specified simulation time. This process must
+    * not be running, or on the scheduler queue. 'AtTime' must be greater than,
+    * or equal to, the current simulation time. If 'prior' is true then this
+    * process will appear in the simulation queue before any other process with
+    * the same simulation time.
+    */
 
-    public static void mainResume () throws SimulationException
-    {
-        if (SimulationProcess.mainThread == null)
-            throw new SimulationException("No main thread");
+   public void activateAt (double AtTime, boolean prior)
+     throws SimulationException, RestartException
+   {
+      if (terminated || !idle())
+         return;
 
-        synchronized (SimulationProcess.mainThread)
-        {
-            try
-            {
-                SimulationProcess.mainThread.notify();
-            }
-            catch (final Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-    }
+      if (AtTime < SimulationProcess.currentTime())
+         throw new SimulationException("Invalid time " + AtTime);
 
-    protected SimulationProcess()
-    {
-        wakeuptime = SimulationProcess.NEVER;
-        terminated = false;
-        passivated = true;
-        started = false;
+      passivated = false;
+      wakeuptime = AtTime;
+      Scheduler.getQueue().insert(this, prior);
+   }
 
-        SimulationProcess.allProcesses.insert(this);
-    }
+   /**
+    * Activate this process at the specified simulation time. This process must
+    * not be running, or on the scheduler queue. 'AtTime' must be greater than,
+    * or equal to, the current simulation time.
+    */
 
-    protected void setEvtime (double time) throws SimulationException
-    {
-        if (!idle())
-        {
-            if (time >= SimulationProcess.currentTime())
-                wakeuptime = time;
-            else
-                throw new SimulationException("Time " + time + " invalid.");
-        }
-        else
-            throw new SimulationException("SimulationProcess is not idle.");
-    }
+   public void activateAt (double AtTime) throws SimulationException,
+     RestartException
+   {
+      activateAt(AtTime, false);
+   }
 
-    /**
-     * Hold the current process for the specified amount of simulation time.
-     */
+   /**
+    * This process will be activated after 'Delay' units of simulation time.
+    * This process must not be running, or on the scheduler queue. 'Delay' must
+    * be greater than, or equal to, zero. If 'prior' is true then this process
+    * will appear in the simulation queue before any other process with the
+    * same simulation time.
+    */
 
-    protected void hold (double t) throws SimulationException, RestartException
-    {
-        if ((this == SimulationProcess.Current)
-                || (SimulationProcess.Current == null))
-        {
+   public void activateDelay (double Delay, boolean prior)
+     throws SimulationException, RestartException
+   {
+      if (terminated || !idle())
+      {
+         // [HB] System.out.println("!!! Cannot apply delay. isIdle():"+idle());
+         return;
+      }
+
+      if (!checkTime(Delay))
+         throw new SimulationException("Invalid delay time " + Delay);
+
+      passivated = false;
+      wakeuptime = Scheduler.getSimulationTime() + Delay;
+      Scheduler.getQueue().insert(this, prior);
+   }
+
+   /**
+    * This process will be activated after 'Delay' units of simulation time.
+    * This process must not be running, or on the scheduler queue. 'Delay' must
+    * be greater than, or equal to, zero.
+    */
+
+   public void activateDelay (double Delay) throws SimulationException,
+     RestartException
+   {
+      activateDelay(Delay, false);
+   }
+
+   /**
+    * Activate this process at the current simulation time. This process must
+    * not be running, or on the scheduler queue.
+    */
+
+   public void activate () throws SimulationException, RestartException
+   {
+      if (terminated || !idle())
+         return;
+
+      passivated = false;
+      wakeuptime = currentTime();
+      Scheduler.getQueue().insert(this, true);
+   }
+
+   /**
+    * Reactivate this process before process 'p'.
+    */
+
+   public void reactivateBefore (SimulationProcess p)
+     throws SimulationException, RestartException
+   {
+      if (!idle())
+         Scheduler.unschedule(this);
+
+      activateBefore(p);
+
+      if (SimulationProcess.Current == this)
+         suspendProcess();
+   }
+
+   /**
+    * Reactivate this process after process 'p'.
+    */
+
+   public void reactivateAfter (SimulationProcess p)
+     throws SimulationException, RestartException
+   {
+      if (!idle())
+         Scheduler.unschedule(this);
+
+      activateAfter(p);
+
+      if (SimulationProcess.Current == this)
+         suspendProcess();
+   }
+
+   /**
+    * Reactivate this process at the specified simulation time. 'AtTime' must
+    * be valid. If 'prior' is true then this process will appear in the
+    * simulation queue before any other process with the same simulation time.
+    */
+
+   public void reactivateAt (double AtTime, boolean prior)
+     throws SimulationException, RestartException
+   {
+      if (!idle())
+         Scheduler.unschedule(this);
+
+      activateAt(AtTime, prior);
+
+      if (SimulationProcess.Current == this)
+      {
+         suspendProcess();
+      }
+   }
+
+   /**
+    * Reactivate this process at the specified simulation time. 'AtTime' must
+    * be valid.
+    */
+
+   public void reactivateAt (double AtTime) throws SimulationException,
+     RestartException
+   {
+      reactivateAt(AtTime, false);
+   }
+
+   /**
+    * Reactivate this process after 'Delay' units of simulation time. If
+    * 'prior' is true then this process will appear in the simulation queue
+    * before any other process with the same simulation time.
+    */
+
+   public void reactivateDelay (double Delay, boolean prior)
+     throws SimulationException, RestartException
+   {
+      if (!idle())
+         Scheduler.unschedule(this);
+
+      activateDelay(Delay, prior);
+
+      if (SimulationProcess.Current == this)
+         suspendProcess();
+   }
+
+   /**
+    * Reactivate this process after 'Delay' units of simulation time.
+    */
+
+   public void reactivateDelay (double Delay) throws SimulationException,
+     RestartException
+   {
+      reactivateDelay(Delay, false);
+   }
+
+   /**
+    * Reactivate this process at the current simulation time.
+    */
+
+   public void reactivate () throws SimulationException, RestartException
+   {
+      if (!idle())
+         Scheduler.unschedule(this);
+
+      activate();
+
+      if (SimulationProcess.Current == this)
+         suspendProcess();
+   }
+
+   /**
+    * Cancels next burst of activity, process becomes idle.
+    */
+
+   public void cancel () throws RestartException
+   {
+      /*
+      * We must suspend this process either by removing it from the scheduler
+      * queue (if it is already suspended) or by calling suspend directly.
+      */
+
+      if (!idle()) // process is running or on queue to be run
+      {
+         // currently active, so simply suspend
+
+         if (this == SimulationProcess.Current)
+         {
             wakeuptime = SimulationProcess.NEVER;
-            activateDelay(t, false);
+            passivated = true;
             suspendProcess();
-        }
-        else
-            throw new SimulationException("Hold applied to inactive object.");
-    }
+         }
+         else
+         {
+            Scheduler.unschedule(this); // remove from queue
+         }
+      }
+   }
 
-    protected void passivate () throws RestartException
-    {
-        if (!passivated && (this == SimulationProcess.Current))
-            cancel();
-    }
+   /**
+    * Terminate this process: no going back!
+    */
 
-    /**
-     * Suspend the process. If it is not running, then this routine should not
-     * be called.
-     */
+   public void terminate ()
+   {
+      if (!terminated)
+      {
+         terminated = passivated = true;
+         wakeuptime = SimulationProcess.NEVER;
 
-    protected void suspendProcess () throws RestartException
-    {
-        try
-        {
-            if (Scheduler.schedule())
+         if ((this != SimulationProcess.Current) && (!idle()))
+            Scheduler.unschedule(this);
+
+         try
+         {
+            Scheduler.schedule();
+         }
+         catch (SimulationException e)
+         {
+         }
+
+         SimulationProcess.allProcesses.remove(this);
+      }
+   }
+
+   /**
+    * Is the process idle?
+    */
+
+   public synchronized boolean idle ()
+   {
+      if (wakeuptime >= SimulationProcess.currentTime())
+         return false;
+      else
+         return true;
+   }
+
+   /**
+    * Has the process been passivated?
+    */
+
+   public boolean passivated ()
+   {
+      return passivated;
+   }
+
+   /**
+    * Has the process been terminated?
+    */
+
+   public boolean terminated ()
+   {
+      return terminated;
+   }
+
+   /**
+    * Return the currently active simulation process.
+    */
+
+   public static SimulationProcess current () throws SimulationException
+   {
+      if (SimulationProcess.Current == null)
+         throw new SimulationException("Current not set.");
+
+      return SimulationProcess.Current;
+   }
+
+   /**
+    * Return the current simulation time.
+    */
+
+   public static double currentTime ()
+   {
+      return Scheduler.getSimulationTime();
+   }
+
+   /**
+    * Suspend the main thread.
+    */
+
+   public static void mainSuspend ()
+   {
+      SimulationProcess.mainThread = Thread.currentThread();
+
+      // [HB] System.out.println("mainSuspend() -> Aquire lock on main thread: "+ Thread.currentThread());
+      synchronized (SimulationProcess.mainThread)
+      {
+         try
+         {                       
+            // [HB] System.out.println("Suspending " + SimulationProcess.mainThread);
+            mainSuspended = true;
+            SimulationProcess.mainThread.wait();
+         }
+         catch (final Exception ex)
+         {
+            ex.printStackTrace();
+         }
+      }
+   }
+
+   /**
+    * Resume the main thread.
+    */
+
+   public static void mainResume () throws SimulationException
+   {
+      if (SimulationProcess.mainThread == null)
+         throw new SimulationException("No main thread");
+
+      // [HB] System.out.println("mainResume() -> Aquire lock on main thread: " + SimulationProcess.mainThread);
+      synchronized (SimulationProcess.mainThread)
+      {
+         try
+         {
+            // [HB] System.out.println("Resuming " + SimulationProcess.mainThread);
+            SimulationProcess.mainThread.notify();
+            mainSuspended = false;
+         }
+         catch (final Exception ex)
+         {
+            ex.printStackTrace();
+         }
+      }
+   }
+
+   protected SimulationProcess()
+   {
+      wakeuptime = SimulationProcess.NEVER;
+      terminated = false;
+      passivated = true;
+      started = false;
+
+      SimulationProcess.allProcesses.insert(this);
+   }
+
+   protected void setEvtime (double time) throws SimulationException
+   {
+      if (!idle())
+      {
+         if (time >= SimulationProcess.currentTime())
+            wakeuptime = time;
+         else
+            throw new SimulationException("Time " + time + " invalid.");
+      }
+      else
+         throw new SimulationException("SimulationProcess is not idle.");
+   }
+
+   /**
+    * Hold the current process for the specified amount of simulation time.
+    */
+
+   protected void hold (double t) throws SimulationException, RestartException
+   {
+      if ((this == SimulationProcess.Current)
+        || (SimulationProcess.Current == null))
+      {
+         wakeuptime = SimulationProcess.NEVER;
+         activateDelay(t, false);
+         suspendProcess();
+      }
+      else
+         throw new SimulationException("Hold applied to inactive object.");
+   }
+
+   protected void passivate () throws RestartException
+   {
+      if (!passivated && (this == SimulationProcess.Current))
+         cancel();
+   }
+
+   /**
+    * Suspend the process. If it is not running, then this routine should not
+    * be called.
+    */
+
+   protected void suspendProcess () throws RestartException
+   {
+
+      try
+      {
+         if (Scheduler.schedule())
+         {
+            synchronized (mutex)
             {
-                synchronized (mutex)
-                {
-                    count--;
+               count--;
 
-                    if (count == 0)
-                    {
-                        try
-                        {
-                            mutex.wait();
-                        }
-                        catch (Exception e)
-                        {
-                        }
-                    }
+               if (count == 0)
+               {
+                  try
+                  {
+                     mutex.wait();
+                  }
+                  catch (Exception e)
+                  {
+                  }
+               }
 
-                }
             }
-        }
-        catch (SimulationException e)
-        {
-        }
+         }
+      }
+      catch (SimulationException e)
+      {
+      }
 
-        if (Scheduler.simulationReset())
-            throw new RestartException();
-    }
 
-    /**
-     * Resume the specified process. This can only be called on a process which
-     * has previously been Suspend-ed or has just been created, i.e., the
-     * currently active process will never have Resume called on it.
-     */
+      if (Scheduler.simulationReset())
+         throw new RestartException();
+   }
 
-    protected void resumeProcess ()
-    {
-        /*
+   /**
+    * Resume the specified process. This can only be called on a process which
+    * has previously been Suspend-ed or has just been created, i.e., the
+    * currently active process will never have Resume called on it.
+    */
+
+   protected void resumeProcess ()
+   {
+
+      ThreadUtil.EXEC_LOCK.lock();
+      try
+      {
+         /*
          * To compensate for the initial call to Resume by the application.
          */
+         // [HB] System.out.println("\t # resume " + this);
 
-        if (SimulationProcess.Current == null)
-        {
+         if (SimulationProcess.Current == null)
+         {
             SimulationProcess.Current = this;
             wakeuptime = SimulationProcess.currentTime();
-        }
+         }
 
-        if (!terminated)
-        {
+         if (!terminated)
+         {
             if (!started)
             {
-                started = true;
-                start();
+               started = true;
+               start();
             }
             else
             {
-                synchronized (mutex)
-                {
-                    count++;
+               synchronized (mutex)
+               {
+                  count++;
 
-                    if (count >= 0)
-                        mutex.notify();
-                }
+                  if (count >= 0)
+                  {
+                     mutex.notify();
+                  }
+               }
             }
-        }
-    }
 
-    private boolean checkTime (double time)
-    {
-        if (time >= 0)
-            return true;
-        else
-            return false;
-    }
+            // [HB] System.out.println("\t # exit resume: " + this);
+         }
 
-    void deactivate ()
-    {
-        passivated = true;
-        wakeuptime = SimulationProcess.NEVER;
-    }
+      }
+      finally
+      {
+         ThreadUtil.EXEC_LOCK.unlock();
+      }
+   }
 
-    static SimulationProcessList allProcesses = new SimulationProcessList();
 
-    private double wakeuptime;
+   private boolean checkTime (double time)
+   {
+      if (time >= 0)
+         return true;
+      else
+         return false;
+   }
 
-    private boolean terminated;
+   void deactivate ()
+   {
+      passivated = true;
+      wakeuptime = SimulationProcess.NEVER;
+   }
 
-    private boolean passivated;
+   protected void waitForMainSuspended()
+   {
+      long timeout = System.currentTimeMillis()+2000;
+      while(System.currentTimeMillis()<timeout && !mainSuspended)
+      {
+         //
+      }
 
-    private boolean started;
+      if(System.currentTimeMillis()>=timeout && !mainSuspended)
+         throw new IllegalStateException("Main thread wasn't suspended");
+   }
 
-    private Object mutex = new Object();
+   static SimulationProcessList allProcesses = new SimulationProcessList();
+   
+   private double wakeuptime;
 
-    private int count = 1;
+   private boolean terminated;
 
-    private static Thread mainThread = null;
+   private boolean passivated;
 
-    static SimulationProcess Current = null;
+   private boolean started;
+
+   private final Object mutex = new Object();
+
+   protected static boolean mainSuspended = false;
+
+   private int count = 1;
+
+   private static Thread mainThread = null;
+
+   static SimulationProcess Current = null;
 
 }
