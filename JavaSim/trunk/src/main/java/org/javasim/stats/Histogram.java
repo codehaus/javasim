@@ -61,7 +61,7 @@ public class Histogram extends PrecisionHistogram
 
     public Histogram(long maxIndex, int mergeChoice)
     {
-        if (maxIndex > 0)
+        if (maxIndex > 1)
             maxSize = maxIndex;
         else
             maxSize = 2;
@@ -75,7 +75,7 @@ public class Histogram extends PrecisionHistogram
 
     public Histogram(long maxIndex)
     {
-        if (maxIndex > 0)
+        if (maxIndex > 1)
             maxSize = maxIndex;
         else
             maxSize = 2;

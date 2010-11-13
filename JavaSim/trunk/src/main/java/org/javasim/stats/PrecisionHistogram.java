@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.lang.IllegalArgumentException;
 
 /**
- * This is the base histogram class which keeps an exact tally of all values
+ * This is the base histogram class which keeps an exact total of all values
  * input, i.e., a bucket is created for each new value. This can take up a lot
  * of space in a given simulation, so other (less precise) histogram classes are
  * also provided.
@@ -90,13 +90,6 @@ public class PrecisionHistogram extends Variance
     {
         if (length > 0) // delete old list
         {
-            Bucket trail = Head;
-            for (long i = 0; i < length; i++)
-            {
-                Head = Head.cdr();
-                trail = Head;
-            }
-
             length = 0;
             Head = null;
         }
@@ -254,7 +247,7 @@ public class PrecisionHistogram extends Variance
     {
         try
         {
-            double dummy = sizeByName(value);
+            sizeByName(value);
 
             return true;
         }

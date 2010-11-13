@@ -49,7 +49,7 @@ public class Scheduler extends Thread
 {
 
     /**
-      * Get the current simulation time.\
+      * Get the current simulation time.
       * 
       * @return the current simulation time.
       */
