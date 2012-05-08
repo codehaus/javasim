@@ -124,7 +124,7 @@ void Tester::Body ()
 {
     DummyProcess *dp = (DummyProcess*) 0;
     int i;
-    
+
     // put half of the required elements in the list
 
     for (i = 0; i < number; i++)
@@ -172,11 +172,12 @@ void Tester::Body ()
     }
 #else
     DummyProcess* trail = (DummyProcess*) 0;
-    
+
     dp = head;
     for (i = 0; i < number; i++)
     {
         dp->Cancel();
+
 	trail = dp;
 	dp = dp->next;
 
