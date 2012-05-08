@@ -39,6 +39,9 @@
 #  include <ClassLib/Process.h>
 #endif
 
+class Semaphore;
+class TriggerQueue;
+
 class Entity : public Process
 {
     friend class Semaphore;
