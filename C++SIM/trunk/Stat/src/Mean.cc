@@ -30,7 +30,10 @@
 #include <iostream.h>
 #include <fstream.h>
 #include <iomanip.h>
+#include <limits>
 #include <math.h>
+
+using namespace std;
 
 #ifndef MEAN_H_
 #  include <Stat/Mean.h>
@@ -42,8 +45,10 @@ Mean::~Mean () {}
 
 void Mean::reset ()
 {
-    _Max = -MAXFLOAT;
-    _Min = MAXFLOAT;
+  //    _Max = -MAXFLOAT;
+  //    _Min = MAXFLOAT;
+  _Max = numeric_limits<float>::max();
+  _Min = numeric_limits<float>::min();
     _Sum = _Mean = 0.0;
     _Number = 0;
 }
