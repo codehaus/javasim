@@ -686,6 +686,10 @@ THREAD_CPPFLAGS="$THREAD_CPPFLAGS -DPTHREAD_DRAFT_"$PTHREAD_DRAFT
 
 if test "'x$THREAD_CHANGED'" = "'xYES'"
 then
+if test "'x$PTHREAD_DRAFT'" = "'xLINUX'"
+then
+    LD_THREAD_LIBS="-lpthread"
+else
 if test "'x$PTHREAD_DRAFT'" = "'xSOLARIS'"
 then
     LD_THREAD_LIBS="-lposix4 -lpthread"
@@ -695,6 +699,7 @@ then
     LD_THREAD_LIBS="-ldce"
 else
     LD_THREAD_LIBS="-lpthread"
+fi
 fi
 fi
 fi
