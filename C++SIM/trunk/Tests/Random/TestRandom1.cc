@@ -26,9 +26,11 @@
  * UK.
  */
 
+/*
 #ifdef __GNUG__
 #  include <GetOpt.h>
 #endif
+*/
 
 #include <stdlib.h>	// to get getopt and atoi
 #include <iostream.h>
