@@ -35,6 +35,8 @@
 #  include <Common/Boolean.h>
 #endif
 
+class Entity;
+class Sempaphore;
 class EntityList;
 
 class TriggerQueue
