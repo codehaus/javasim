@@ -38,10 +38,6 @@
 #  include <Common/Resource.h>
 #endif
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef NTTHREAD_H_
 #  include <nt_thread.h>
 #endif

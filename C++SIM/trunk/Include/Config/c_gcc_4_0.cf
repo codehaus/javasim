@@ -15,51 +15,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
  * MA  02110-1301, USA.
  * 
- * (C) 1990-2008,
- */
- /*
- * Copyright (C) 1994
- *
- * Department of Computing Science,
- * The University,
- * Newcastle upon Tyne,
- * UK.
+ * (C) 2008,
  */
 
-#if defined(NO_INLINES) && !defined(ERROR_CC_)
+/*
+ * c_gcc_4_0.cf
+ */
 
-extern ostream& operator<< (ostream&, ErrorSeverity);
-
+#ifdef MAY_NEED_GCC_PROTOTYPES
+#define COMPILER_SPECIFIC_FLAGS -DNEED_GCC_PROTOTYPES -DHAVE_BOOLEAN_TYPE -DHAVE_WCHAR_TYPE -DHAVE_LONG_LONG -DGCC_STATIC_INIT_BUG -DMEMFNS_IN_STRING_H -DCPLUSPLUS_STANDARD
 #else
-
-#ifndef NO_INLINES
-#  define INLINEF inline
-#else
-#  define INLINEF
+#define COMPILER_SPECIFIC_FLAGS -DHAVE_BOOLEAN_TYPE -DHAVE_WCHAR_TYPE -DHAVE_LONG_LONG -DGCC_STATIC_INIT_BUG -DMEMFNS_IN_STRING_H -DCPLUSPLUS_STANDARD
 #endif
 
-#include <iostream.h>
-#include <stdlib.h>
-
-#ifndef WIN32
-#  include <sys/types.h>
-#  include <unistd.h>
-#else
-#  include <process.h>
-#endif
-
-#include <iostream.h>
-
-INLINEF ostream& operator<< ( ostream& strm, ErrorSeverity es )
-{
-    strm << (es == FATAL ? "\007FATAL ERROR" : "WARNING");
-    strm << "(process id : " << getpid() << ") : ";
-    
-    return strm;
-}
-
-#ifdef INLINEF
-#  undef INLINEF
-#endif
-
-#endif
+#define STUBGEN_CC_FLAGS "-D__GNUG__=4 -D__GNUC__=4 -D__GNUC_MINOR__=0 -D__GCC_NEW_VARARGS__"

@@ -31,10 +31,6 @@
 #include <fstream.h>
 #include <iomanip.h>
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef PHISTOGRAM_H_
 #  include <Stat/PHistogram.h>
 #endif
@@ -164,7 +160,7 @@ Boolean PrecisionHistogram::sizeByIndex (long index, double& size)
 
     // we should never get here!
 
-    error_stream << WARNING
+    cerr
 		 << "PrecisionHistogram::sizeByIndex went off end of list."
 		 << endl;
 
@@ -240,7 +236,7 @@ Boolean PrecisionHistogram::saveState (const char* fileName) const
     
     if (!oFile)
     {
-	error_stream << WARNING << "PrecisionHistogram::saveState - error " << errno
+	cerr << "PrecisionHistogram::saveState - error " << errno
 		     << " for file " << fileName << endl;
 	return FALSE;
     }
@@ -285,7 +281,7 @@ Boolean PrecisionHistogram::restoreState (const char* fileName)
     
     if (!iFile)
     {
-	error_stream << WARNING
+	cerr
 		     << "PrecisionHistogram::restoreState - error " << errno
 		     << " for file " << fileName << endl;
 	return FALSE;

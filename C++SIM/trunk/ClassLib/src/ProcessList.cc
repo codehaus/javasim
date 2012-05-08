@@ -26,11 +26,6 @@
  * UK.
  */
 
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef PROCESSLIST_H_
 #  include "ProcessList.h"
 #endif

@@ -162,7 +162,7 @@ echo $S_CONFIG
 
 if [ -z $S_CONFIG ]; then
 	S_CONFIG=s_unknown.cf
-	echo "WARNING no OS specific config file for this OS! using :" $S_CONFIG
+	echo "WARNING no OS specific config file for this OS! using :" $S_CONFIG" instead of "${OSNAME}.cf
 fi
 
 echo
@@ -187,6 +187,11 @@ HP-RT)	LDFLAGS_DEFAULT="+A"
 	CPLUSPLUS_NATIVE_COMPILER=CC
 	DEFAULT_THREAD_SYS="POSIX_THREAD"
 	THREAD_TYPE="Posix_Task"
+	;;
+Darwin) CPLUSPLUS_PROGRAM=g++
+	DEFAULT_THREAD_SYS="POSIX_THREAD"
+	THREAD_TYPE="Posix_Thread"
+	CPLUSPLUSFLAGS_DEFAULT=-Wno-deprecated
 	;;
 Linux)	CPLUSPLUS_PROGRAM=g++
 	CPLUSPLUS_NATIVE_COMPILER=g++
@@ -512,7 +517,7 @@ echo
 
 echo $PRE_ECHO "Finding standard C++ include directory, please wait ..." $POST_ECHO
 echo '#include <iostream.h>' > configtest.C
-CPLUSPLUS_INCLUDE_DEFAULT=`$CPLUSPLUS_PROGRAM -E configtest.C | grep "/iostream.h" | head -1 |sed -e 's|[^"]*"\([^"]*\).*|\1|' -e 's|/iostream.h||'`
+CPLUSPLUS_INCLUDE_DEFAULT=`$CPLUSPLUS_PROGRAM -E -Wno-deprecated configtest.C | grep "/iostream.h" | head -1 |sed -e 's|[^"]*"\([^"]*\).*|\1|' -e 's|/iostream.h||'`
 rm -f configtest.C
 echo "done"
 

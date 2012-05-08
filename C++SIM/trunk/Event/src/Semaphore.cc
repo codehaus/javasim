@@ -28,16 +28,8 @@
  * $Id: Semaphore.cc,v 1.8 1998/09/30 08:07:15 nmcl Exp $ 
  */
 
-#if defined(DEBUG) && !defined(DEBUG_H_)
-#  include <Common/Debug.h>
-#endif
-
 #ifndef ENTITY_H_
 #  include <Event/Entity.h>
-#endif
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
 #endif
 
 #ifndef SEMAPHORE_H_
@@ -82,7 +74,7 @@ Semaphore::~Semaphore ()
 #endif
     
     if (numberWaiting != 0)
-	error_stream << WARNING
+	cerr
 		     << "Semaphore being removed with clients waiting." << endl;
 }
 

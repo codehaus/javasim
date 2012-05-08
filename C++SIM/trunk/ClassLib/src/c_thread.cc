@@ -34,10 +34,7 @@
 
 #include <setjmp.h>
 #include <stdlib.h>
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
+#include <iostream.h>
 
 #ifndef C_THREAD_H_
 #  include <c_thread.h>
@@ -91,7 +88,7 @@ Thread::Thread (Boolean create)
 
     if (mutex_alloc(&_data->mx, N_CURRENT) != T_SUCCEED)
     {
-	error_stream << FATAL
+	cerr << FATAL
 		     << "C_Thread error - cannot allocate thread mutex!"
 		     << endl;
 	abort();
@@ -125,7 +122,7 @@ Thread::Thread (unsigned long)
 
     if (mutex_alloc(&_data->mx, N_CURRENT) != T_SUCCEED)
     {
-	error_stream << FATAL
+	cerr << FATAL
 		     << "C_Thread error - cannot allocate thread mutex!"
 		     << endl;
 	abort();

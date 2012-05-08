@@ -31,10 +31,6 @@
 #include <fstream.h>
 #include <iomanip.h>
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef HISTOGRAM_H_
 #  include <Stat/Histogram.h>
 #endif
@@ -86,7 +82,7 @@ long Histogram::compositeSize (const Bucket& a, const Bucket& b) const
 
     // shouldn't get here!
 
-    error_stream << WARNING << "compositeSize switch error." << endl;
+    cerr << "compositeSize switch error." << endl;
     return 0;
 }
 
@@ -187,7 +183,7 @@ Boolean Histogram::saveState (const char* fileName) const
     
     if (!oFile)
     {
-	error_stream << WARNING << "Histogram::saveState - error " << errno
+	cerr << "Histogram::saveState - error " << errno
 		     << " for file " << fileName << endl;
 	return FALSE;
     }
@@ -217,7 +213,7 @@ Boolean Histogram::restoreState (const char* fileName)
     
     if (!iFile)
     {
-	error_stream << WARNING << "Histogram::restoreState - error " << errno
+	cerr << "Histogram::restoreState - error " << errno
 		     << " for file " << fileName << endl;
 	return FALSE;
     }

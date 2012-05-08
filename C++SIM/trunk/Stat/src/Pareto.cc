@@ -27,10 +27,7 @@
  */
 
 #include <math.h>
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
+#include <iostream.h>
 
 #ifndef PARETO_H_
 #  include <Stat/Pareto.h>
@@ -47,7 +44,7 @@ double Pareto::pdf (double x)
 {
     if (x < _k)
     {
-	error_stream << WARNING
+	cerr
 		     << "Pareto::pdf - invalid value for x." << endl;
 	return 0;
     }
@@ -59,7 +56,7 @@ double Pareto::cdf (double x)
 {
     if (x < _k)
     {
-	error_stream << WARNING
+	cerr
 		     << "Pareto::cdf - invalid value for x." << endl;
 	return 0;
     }

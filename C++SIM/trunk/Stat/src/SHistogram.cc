@@ -33,10 +33,6 @@
 #include <fstream.h>
 #include <iomanip.h>
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef SHISTOGRAM_H_
 #  include <Stat/SHistogram.h>
 #endif
@@ -100,7 +96,7 @@ void SimpleHistogram::setValue (double value)
 {
     if ((value < minIndex) || (value > maxIndex))
     {
-        error_stream << WARNING << "Value " << value
+        cerr << "Value " << value
 		     << " is beyond histogram range "
 		     << "[ " << minIndex << ", "
 		     << maxIndex << " ]" << endl;
@@ -120,7 +116,7 @@ void SimpleHistogram::setValue (double value)
 
     // shouldn't get here!!
 
-    error_stream << WARNING
+    cerr
 		 << "SimpleHistogram::setValue - Something went wrong with "
 		 << value << endl;
 }
@@ -153,7 +149,7 @@ Boolean SimpleHistogram::saveState (const char* fileName) const
     
     if (!oFile)
     {
-	error_stream << WARNING << "SimpleHistogram::saveState - error "
+	cerr << "SimpleHistogram::saveState - error "
 		     << errno << " for file " << fileName << endl;
 	return FALSE;
     }
@@ -181,7 +177,7 @@ Boolean SimpleHistogram::restoreState (const char* fileName)
     
     if (!iFile)
     {
-	error_stream << WARNING << "SimpleHistogram::restoreState - error "
+	cerr << "SimpleHistogram::restoreState - error "
 		     << errno << " for file " << fileName << endl;
 	return FALSE;
     }

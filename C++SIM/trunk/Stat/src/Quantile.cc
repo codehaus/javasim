@@ -26,11 +26,6 @@
  * UK.
  */
 
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef QUANTILE_H_
 #  include <Stat/Quantile.h>
 #endif
@@ -42,7 +37,7 @@ Quantile::Quantile (double q)
 		   : qProb(((q > 0.0) && (q <= 1.0)) ? q : 0.95)
 {
     if ((q <= 0.0) || (q > 1.0))
-	error_stream << WARNING << "Quantile::Quantile ( " << q << " ) : bad value." << endl;
+	cerr << "Quantile::Quantile ( " << q << " ) : bad value." << endl;
 }
 
 Quantile::~Quantile () {}
@@ -55,7 +50,7 @@ double Quantile::operator() () const
 
     if (pSamples == 0.0)
     {
-	error_stream << WARNING << "Quantile::operator() : percentage samples error." << endl;
+	cerr << "Quantile::operator() : percentage samples error." << endl;
 	return 0.0;
     }
     

@@ -32,14 +32,6 @@
 #  include <ClassLib/thread.h>
 #endif
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
-#if defined(DEBUG) && !defined(DEBUG_H_)
-#  include <Common/Debug.h>
-#endif
-
 #ifndef HASHEDLIST_H_
 #  include "HashedList.h"
 #endif
@@ -127,7 +119,7 @@ Process* HashedList::findMinimum (const Process* from) const
 	{
 	    if (p->evtime() == Process::Never)
 	    {
-		error_stream << FATAL << "HashedList::findMinimum found process with negative time!" << endl;
+		cerr << FATAL << "HashedList::findMinimum found process with negative time!" << endl;
 		Thread::Exit(-1);
 	    }
 	    

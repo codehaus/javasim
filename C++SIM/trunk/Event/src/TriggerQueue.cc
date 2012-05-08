@@ -36,10 +36,6 @@
 #  include "EntityList.h"
 #endif
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef TRIGGERQUEUE_H_
 #  include <Event/TriggerQueue.h>
 #endif
@@ -62,7 +58,7 @@ TriggerQueue::~TriggerQueue ()
     {
 	if (head->numberOfElements() > 0)
 	{
-	    error_stream << WARNING << "TriggerQueue destructor called with non-zero list!" << endl;
+	    cerr << "TriggerQueue destructor called with non-zero list!" << endl;
 	    (void) triggerAll();
 	}
 
@@ -75,7 +71,7 @@ Boolean TriggerQueue::triggerFirst (Boolean setTrigger)
     if (head->numberOfElements() == 0)
     {
 #ifdef DEBUG
-	error_stream << WARNING
+	cerr
 		     << "triggerFirst called with empty list." << endl;
 #endif
 	return FALSE;
@@ -86,7 +82,7 @@ Boolean TriggerQueue::triggerFirst (Boolean setTrigger)
     if (removed == (Entity*) 0)
     {
 #ifdef DEBUG
-	error_stream << WARNING
+	cerr
 		     << "triggerFirst called and got a null entry from list!"
 		     << endl;
 #endif
@@ -108,7 +104,7 @@ Boolean TriggerQueue::triggerAll ()
     if (currentNumber == 0)
     {
 #ifdef DEBUG
-	error_stream << WARNING << "TriggerAll called with empty list." << endl;
+	cerr << "TriggerAll called with empty list." << endl;
 #endif
 	return FALSE;
     }
@@ -124,7 +120,7 @@ void TriggerQueue::insert (Entity* toAdd)
     if (toAdd->isWaiting())  // currently cannot be waiting for multiple events
     {
 #ifdef DEBUG
-	error_stream << WARNING
+	cerr
 		     << "TriggerQueue::insert called for entry which is already waiting."
 		     << endl;
 #endif

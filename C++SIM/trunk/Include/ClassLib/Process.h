@@ -1,20 +1,20 @@
 /*
  * Copyright 1990-2008, Mark Little, University of Newcastle upon Tyne
- * and others contributors as indicated 
- * by the @authors tag. All rights reserved. 
+ * and others contributors as indicated
+ * by the @authors tag. All rights reserved.
  * See the copyright.txt in the distribution for a
- * full listing of individual contributors. 
+ * full listing of individual contributors.
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions
  * of the GNU Lesser General Public License, v. 2.1.
- * This program is distributed in the hope that it will be useful, but WITHOUT A 
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+ * This program is distributed in the hope that it will be useful, but WITHOUT A
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
  * PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
  * You should have received a copy of the GNU Lesser General Public License,
  * v.2.1 along with this distribution; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
- * 
+ *
  * (C) 1990-2008,
  */
  /*
@@ -31,6 +31,8 @@
 #ifndef PROCESS_H_
 #define PROCESS_H_
 
+#include <iostream.h>
+
 #ifndef CONFIGURE_H_
 #  include <Config/Configure.h>
 #endif
@@ -39,19 +41,9 @@
 #  include <Common/Boolean.h>
 #endif
 
-#if defined(DEBUG) && !defined(DEBUG_H_)
-#  include <Common/Debug.h>
-#endif
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef THREAD_H_
 #  include <ClassLib/thread.h>
 #endif
-
-class ostream;
 
 /*
  * This is the main class for the simulation package. All objects which are to
@@ -89,7 +81,7 @@ public:
     static Boolean simulationStarted ();
 
     static void print (ostream&);
-    
+
 protected:
     Scheduler ();
     virtual ~Scheduler ();
@@ -101,13 +93,13 @@ private:
 
 class Process : public Thread
 {
-    friend Scheduler;
+    friend class Scheduler;
 
 public:
     static const double Never;
 
     virtual ~Process ();
-    
+
     /* The following two methods return the current simulation time */
 
     static double CurrentTime ();       // C++SIM version
@@ -125,9 +117,9 @@ public:
     /*
      * There are five ways to activate a process:
      *   1) at the current simulation time
-     *   2) before another process, 
-     *   3) after another process, 
-     *   4) at a specified (simulated) time, or 
+     *   2) before another process,
+     *   3) after another process,
+     *   4) at a specified (simulated) time, or
      *   5) after a specified (simulated) delay
      */
 
@@ -182,11 +174,11 @@ public:
      * This method is called whenever a simulation is reset. Default does
      * nothing.
      */
-    
+
     virtual void reset  ();
 
     static Process* Current;
-    
+
 protected:
     Process ();
     Process (unsigned long stackSize);
@@ -196,7 +188,7 @@ protected:
 
     void set_evtime (double); // set wakeuptime (used by Scheduler)
 
-    // remove from scheduler queue and prepare for passivation    
+    // remove from scheduler queue and prepare for passivation
     void unschedule ();
 
 private:

@@ -74,7 +74,7 @@ Boolean Entity::WaitFor (Entity& controller, Boolean reAct)
 
     if (&controller == this)      // can't wait on self!
     {
-        error_stream << WARNING << "Entity::WaitFor - cannot wait on self!" << endl;
+        cerr << "Entity::WaitFor - cannot wait on self!" << endl;
 	return FALSE;
     }
 
@@ -168,14 +168,14 @@ Boolean Entity::Interrupt (Entity& toInterrupt, Boolean immediate)
     if (toInterrupt.terminated())
     {
 #ifdef DEBUG
-	error_stream << WARNING << "Interrupt called on terminated object." << endl;
+	cerr << "Interrupt called on terminated object." << endl;
 #endif
 	return FALSE;
     }
     
     if (!toInterrupt._waiting)
     {
-        error_stream << WARNING << "Interrupt called on object which is not in wait state." << endl;
+        cerr << "Interrupt called on object which is not in wait state." << endl;
         return FALSE;
     }
     

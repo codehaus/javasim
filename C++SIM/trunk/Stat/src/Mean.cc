@@ -29,12 +29,8 @@
 #include <errno.h>
 #include <iostream.h>
 #include <fstream.h>
-#include <values.h>
 #include <iomanip.h>
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
+#include <math.h>
 
 #ifndef MEAN_H_
 #  include <Stat/Mean.h>
@@ -81,7 +77,7 @@ Boolean Mean::saveState (const char* fileName) const
     
     if (!oFile)
     {
-	error_stream << WARNING << "Mean::saveState - error " << errno << " for file " << fileName << endl;
+	cerr << "Mean::saveState - error " << errno << " for file " << fileName << endl;
 	return FALSE;
     }
     
@@ -108,7 +104,7 @@ Boolean Mean::restoreState (const char* fileName)
     
     if (!iFile)
     {
-	error_stream << WARNING << "Mean::restoreState - error " << errno << " for file " << fileName << endl;
+	cerr << "Mean::restoreState - error " << errno << " for file " << fileName << endl;
 	return FALSE;
     }
     

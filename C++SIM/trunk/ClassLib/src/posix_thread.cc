@@ -36,8 +36,6 @@
 #  include <Config/Configure.h>
 #endif
 
-#include <iostream.h>
-
 #ifndef POSIX_THREAD_H_
 #  include <posix_thread.h>
 #endif

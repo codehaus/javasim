@@ -32,10 +32,6 @@
 #include <fstream.h>
 #include <iomanip.h>
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef VARIANCE_H_
 #  include <Stat/Variance.h>
 #endif
@@ -64,7 +60,7 @@ double Variance::variance () const
 
 double Variance::confidence (double)
 {
-    error_stream << WARNING << "Variance::confidence not implemented yet." << endl;
+    cerr << "Variance::confidence not implemented yet." << endl;
     return 0.0;
 }
 
@@ -84,7 +80,7 @@ Boolean Variance::saveState (const char* fileName) const
     
     if (!oFile)
     {
-	error_stream << WARNING << "Variance::saveState - error "
+	cerr << "Variance::saveState - error "
 		     << errno << " for file " << fileName << endl;
 	return FALSE;
     }
@@ -111,7 +107,7 @@ Boolean Variance::restoreState (const char* fileName)
     
     if (!iFile)
     {
-	error_stream << WARNING << "Variance::restoreState - error "
+	cerr << "Variance::restoreState - error "
 		     << errno << " for file " << fileName << endl;
 	return FALSE;
     }

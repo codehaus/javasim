@@ -36,10 +36,6 @@
 #  include <ClassLib/Process.h>
 #endif
 
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef TIMEVARIANCE_H_
 #  include <Stat/TimeVariance.h>
 #endif
@@ -109,7 +105,7 @@ Boolean TimeVariance::saveState (const char* fileName) const
     
     if (!oFile)
     {
-	error_stream << WARNING << "TimeVariance::saveState - error " << errno
+	cerr << "TimeVariance::saveState - error " << errno
 		     << " for file " << fileName << endl;
 	return FALSE;
     }
@@ -138,7 +134,7 @@ Boolean TimeVariance::restoreState (const char* fileName)
     
     if (!iFile)
     {
-	error_stream << WARNING << "TimeVariance::restoreState - error " << errno
+	cerr << "TimeVariance::restoreState - error " << errno
 		     << " for file " << fileName << endl;
 	return FALSE;
     }

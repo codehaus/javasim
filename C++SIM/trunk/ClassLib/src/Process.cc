@@ -189,12 +189,12 @@ void Process::set_evtime (double time)
 	if (time >= Process::CurrentTime())
 	    wakeuptime = time;
 	else
-	    error_stream << WARNING
+	    cerr
 			 << "Process::set_evtime - time " << time
 			 << " invalid" << endl;
     }
     else
-        error_stream << WARNING
+        cerr
 		     << "Process::set_evtime called for idle process." << endl;
 }
 
@@ -221,7 +221,7 @@ void Process::ActivateBefore (Process &p)
     if (ReadyQueue.InsertBefore(*this, p))
 	wakeuptime = p.wakeuptime;
     else
-	error_stream << WARNING << "ActivateBefore failed because 'before' process is not scheduled" << endl;
+	cerr << "ActivateBefore failed because 'before' process is not scheduled" << endl;
 }
 
 void Process::ActivateAfter (Process &p)
@@ -233,7 +233,7 @@ void Process::ActivateAfter (Process &p)
     if (ReadyQueue.InsertAfter(*this, p))
 	wakeuptime = p.wakeuptime;
     else
-	error_stream << WARNING << "ActivateAfter failed because 'after' process is not scheduled" << endl;
+	cerr << "ActivateAfter failed because 'after' process is not scheduled" << endl;
 }
 
 /*
@@ -347,7 +347,7 @@ Boolean Process::schedule ()
 
 	if (Process::Current->evtime() < 0)
 	{
-	    error_stream << WARNING << "Scheduler Error: Process WakeupTime "
+	    cerr << "Scheduler Error: Process WakeupTime "
 			 << Process::Current->evtime() << " invalid.\n";
 	}
 	else
@@ -408,7 +408,7 @@ void Process::Cancel ()
 void Process::reset ()
 {
 #ifdef DEBUG    
-    error_stream << WARNING << "Reset of process called." << endl;
+    cerr << "Reset of process called." << endl;
 #endif    
 }
 
@@ -440,12 +440,12 @@ void Process::Hold (double t)
 	    Suspend();
 	}
 	else
-	    error_stream << WARNING
+	    cerr
 			 << "Process::Hold - can only be applied to active object."
 			 << endl;
     }
     else
-	error_stream << WARNING << "Process::Hold - time " << t
+	cerr << "Process::Hold - time " << t
 		     << " invalid." << endl;
 }
 

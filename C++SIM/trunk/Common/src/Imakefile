@@ -31,18 +31,10 @@ COMMENT
 LIB	= $(LIBCOMMON)
 
 SOURCES = Boolean.cc \
-	  Debug.cc \
-	  Error.cc \
-	  Filtsbuf.cc \
-	  Resource.cc \
-	  Uid.cc
+	  Resource.cc
 
 OBJECTS = Boolean.o \
-	  Debug.o \
-	  Error.o \
-	  Filtsbuf.o \
-	  Resource.o \
-	  Uid.o
+	  Resource.o
 
 SetLocalCppFlags(-I$(ARJUNA_INCLUDES) -I../include)
 
@@ -51,8 +43,4 @@ AllTarget($(LIB))
 MakeLibrary($(LIB),$(OBJECTS))
 
 MakeObjectCPLUSPLUS(Boolean,NOPARAM)
-MakeObjectCPLUSPLUS(Debug,NOPARAM)
-MakeObjectCPLUSPLUS(Error,NOPARAM)
-MakeObjectCPLUSPLUS(Filtsbuf,NOPARAM)
 MakeObjectCPLUSPLUS(Resource,NOPARAM)
-MakeObjectCPLUSPLUS(Uid,NOPARAM)

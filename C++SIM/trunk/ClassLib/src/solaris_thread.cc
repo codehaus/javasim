@@ -33,14 +33,6 @@
 #include <iostream.h>
 #include <unistd.h>
 
-#if defined(DEBUG) && !defined(DEBUG_H_)
-#  include <Common/Debug.h>
-#endif
-
-#ifndef ERROR_H_
-#  include <Common/Error.h>
-#endif
-
 #ifndef SOLARIS_THREAD_H_
 #  include <solaris_thread.h>
 #endif
@@ -132,7 +124,7 @@ Thread::Thread (unsigned long stackSize)
     size_t sizeToUse = ((stackSize < minStackSize) ? minStackSize : (unsigned int) stackSize);
 
     if (stackSize < minStackSize)
-	error_stream << WARNING << "Stack size " << stackSize
+	cerr << "Stack size " << stackSize
 		     << " is too small. Using " << minStackSize << endl;
 
     (void) thr_create(NULL, sizeToUse, ThreadData::Execute,
