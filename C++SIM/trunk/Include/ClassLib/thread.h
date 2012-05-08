@@ -44,6 +44,8 @@
  * and added to whenever a new thread is created.
  */
 
+class ThreadData;
+
 class Thread : public Resource
 {
     friend class ThreadData;
