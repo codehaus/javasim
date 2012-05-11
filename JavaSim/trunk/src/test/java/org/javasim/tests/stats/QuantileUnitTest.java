@@ -20,31 +20,46 @@
 
 package org.javasim.tests.stats;
 
-import org.javasim.stats.Histogram;
+import org.javasim.stats.Quantile;
+import org.javasim.stats.Variance;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class HistogramUnitTest
+public class QuantileUnitTest
 {
     @Test
     public void test () throws Exception
     {
-        Histogram hist = new Histogram(1);
+        Quantile q;
         
-        hist.setValue(10.0);
-        hist.setValue(100.0);
+        try
+        {
+            q = new Quantile(1.1);
+            
+            fail();
+        }
+        catch (final Exception ex)
+        {
+        }
         
-        assertEquals(hist.numberOfBuckets(), (long) 2);
+        try
+        {
+            q = new Quantile(-1.1);
+            
+            fail();
+        }
+        catch (final Exception ex)
+        {
+        }
         
-        hist.saveState("hist.temp");
+        q = new Quantile();
         
-        hist.reset();
+        assertEquals(q.range(), 0.95);
         
-        assertEquals(hist.numberOfBuckets(), (long) 0);
+        for (int i = 0; i < 100; i++)
+            q.setValue(i);
         
-        hist.restoreState("hist.temp");
-        
-        assertEquals(hist.numberOfBuckets(), (long) 2);
+        assertEquals(q.getValue(), 94.0);
     }
 }
